@@ -1,487 +1,1869 @@
 <!DOCTYPE html>
-<html>
-	<head>
-		<meta charset="utf-8">
-		<meta name="viewport" content="width=device-width, initial-scale=1">
-		<title>Pet Planet</title>
-		<style>
-			html {
-				max-height: 100%;
-				max-width: 100%;
-			}
-			body {
-				width: 100%;
-				background-color: #ffffff;
-				font-family: Arial, Helvetica, sans-serif;
-			}
-            #loader {
-			  position: absolute;
-			  left: 50%;
-			  top: 50%;
-			  z-index: 1;
-			  width: 120px;
-			  height: 120px;
-			  margin: -76px 0 0 -76px;
-			  border: 16px solid #c7e9d4;
-			  border-radius: 50%;
-			  border-top: 16px solid #008632;
-			  -webkit-animation: spin 4s linear infinite;
-			  animation: spin 4s linear infinite;
-			}
-			.botao {
-				position: relative;
-				color: #108632;
-				font-size: 20px;
-				top: 60px;
-				left: 85px;
-				background-color: transparent;
-				border: none;
-				cursor: pointer;
-      			transition: transform 0.3s ease;
-			}
-			.cachorroO:hover {
-				transform: scale(-20px, -20px), translateY(-20px);
-			}
-			.menu-superior {
-			  	display: flex;
-			  	justify-content: center;
-			  	align-items: center;
-			  	gap: 10px;
-			  	background-color: #fdfdfd;
-			  	padding: 10px 0;
-			  	position: absolute;
-			  	top: 110px;
-			  	left: 0;
-			  	width: 100%;
-			  	z-index: 10;
-			}
-
-			.menu-superior ul {
-			  	list-style: none;
-			  	display: flex;
-			  	gap: 25px;
-			  	margin: 0;
-			  	padding: 0;
-			}
-
-			.menu-superior li {
-			  	transition: transform 0.3s ease, box-shadow 0.3s ease;
-			  	border-radius: 10px;
-			}
-
-			.menu-superior li:hover {
-			  	transform: scale(1.1);
-			  	box-shadow: 0 4px 10px rgba(0,0,0,0.2);
-			}
-
-			.menu-superior a {
-			  	text-decoration: none;
-			  	font-weight: bold;
-			  	color: white;
-			  	padding: 10px 20px;
-			  	display: block;
-			  	border-radius: 10px;
-			  	transition: background-color 0.3s ease, color 0.3s ease;
-			}
-
-			.cachorro a { background-color: #ffb347; } /* Laranja suave */
-			.cachorro a:hover { background-color: #ffa31a; }
-
-			.gato a { background-color: #a8a7ff; } /* Roxo claro */
-			.gato a:hover { background-color: #8f8eff; }
-
-			.aves a { background-color: #ffd966; } /* Amarelo suave */
-			.aves a:hover { background-color: #ffcf33; }
-
-			.peixes a { background-color: #5bc0de; } /* Azul piscina */
-			.peixes a:hover { background-color: #31b0d5; }
-
-			.exoticos a { background-color: #d87093; } /* Rosa médio */
-			.exoticos a:hover { background-color: #c94c73; }
-
-			.casaejardim a { background-color: #9acd32; } /* Verde vibrante */
-			.casaejardim a:hover { background-color: #7cb518; }
-
-			.icone-menu {
-			  	width: 28px;
-			  	height: 28px;
-			  	vertical-align: middle;
-			 	margin-right: 8px;
-			 	filter: brightness(0) invert(1);
-			  	transition: transform 0.3s ease;
-			}
-
-			.menu-superior li:hover .icone-menu {
-			  	transform: rotate(10deg) scale(1.15);
-			}
-			
-			/*.botao:hover {
-				transform: rotate(90deg);
-			}*/
-			/*.divListaSup {
-				text-align: center;
-			}
-			#listaSup {
-				display: inline-block;
-				list-style-type: none;
-				margin: 0;
-				padding: 0;
-				overflow: hidden;
-			}
-			#conteudoLista {
-				display: inline;
-				float: left;
-			}
-			#conteudoLista a {
-				display: block;
-				padding: 70px;
-				background-color: transparent;
-				text-decoration: none;
-			}*/
-			#buttonlogin{
-				position: fixed;
-				top: 0;
-				right: 5px;
-				border-style: none;
-				background-color: white;
-				font-size: 17px;
-				font-weight: bold;
-			}
-
-			#imglogin {
-				position: fixed;
-				top: 1px;
-				right: 54px;
-				width: 20px;
-				height: 20px;
-			}
-
-			#linklogin{
-				text-decoration: none;
-				color: black;
-			}
-			
-			.grid-container {
-			  	display: grid;
-			  	height: 20vh;
-			  	grid-template-columns: max-content max-content max-content max-content max-content;
-			  	place-content: center;
-			  	align-content: start;
-				justify-content: center;
-				position: absolute;
-				left: 150px;
-			}
-			.search-box {
-				position: absolute;
-				top: 40px;
-				right: 20px;
-				/*transform: translate(-50%, -50%);*/
-				background: #e2e2e2;
-				height: 40px;
-				padding: 10px;
-				border-radius: 40px;
-				display: flex;
-				justify-content: space-between;
-				align-items: center;
-			}
-			.search-txt {
-				border: none;
-				background: none;
-				outline: none;
-				padding: 0;
-				color: #f0f5fb;
-				font-size: 16px;
-				line-height: 40px;
-			}
-			#titulo1 {
-				color: #008632; 
-			}
-			.overlay {
-			    position: fixed;
-			    top: 0;
-			    left: 0;
-			    width: 100%;
-			    height: 100%;
-			    background: rgba(0,0,0,0.5);
-			    opacity: 0;
-			    visibility: hidden;
-			    transition: opacity 0.3s ease;
-			    z-index: 999;
-			}
-			.overlay.visivel {
-			    opacity: 1;
-			    visibility: visible;
-			}
-		    .menu-lateral {
-			    width: 250px;
-			    height: 100vh;
-			    background: #fff;
-				position: fixed;
-			    top: 0;
-			    left: -300px;
-			    transition: left 0.3s ease;
-			    z-index: 1000;
-			    box-shadow: 2px 0 10px rgba(0,0,0,0.2);
-			    display: flex;
-			    flex-direction: column;
-			    padding: 20px;
-			}
-			
-		    .menu-lateral.aberto {
-			    left: 0;
-			}
-			
-			.menu-lateral ul {
-			    list-style: none;
-			    padding: 0;
-			    margin: 0;
-			}
-			
-			.menu-lateral ul li {
-			    margin: 15px 0;
-			}
-			
-			.menu-lateral ul li a {
-			    text-decoration: none;
-			    color: #333;
-			    font-size: 16px;
-			    font-weight: bold;
-			    display: block;
-			    transition: color 0.2s ease;
-			}
-			
-			.menu-lateral ul li a:hover {
-			    color: #007BFF;
-			}
-			.fechar-menu-lat a:hover {
-				color: #ff0000;
-			}
-			.descubraMais {
-				color: #fff;
-				text-align: center;
-				position: absolute;
-				left: 10%;
-				top: 250%;
-				border-radius: 40px;
-				background: #3464c4;
-				padding: 20px; 
-				width: 200px;
-				height: 20px;
-				position: flex;
-				bottom: -20%;
-				-webkit-transform: translateY(-20%);
-				-ms-transform: translateY(-20%);
-				transform: translateY(-20%);
-				-webkit-transform: translateX(170%);
-				-ms-transform: translateX(170%);
-				transform: translateX(170%);
-			}
-
-			@-webkit-keyframes spin {
-			  0% { -webkit-transform: rotate(0deg); }
-			  100% { -webkit-transform: rotate(1080deg); }
-			}
-
-			@keyframes spin {
-			  0% { transform: rotate(0deg); }
-			  100% { transform: rotate(1080deg); }
-			}
-
-            .animate-bottom {
-			  position: relative;
-			  -webkit-animation-name: animatebottom;
-			  -webkit-animation-duration: 1s;
-			  animation-name: animatebottom;
-			  animation-duration: 1s
-			}
-
-			@-webkit-keyframes animatebottom {
-			  from { bottom:-100px; opacity:0 } 
-			  to { bottom:0px; opacity:1 }
-			}
-
-			@keyframes animatebottom { 
-			  from{ bottom:-100px; opacity:0 } 
-			  to{ bottom:0; opacity:1 }
-			}
-		</style>
-	</head>
-	<body onload="delayTime()" style="margin:0;">
-        <!--<div id="loader"></div>-->
-        <div id="content" class="animate-bottom">
-			<div class="overlay" id="overlay"></div>
-			<div class="search-box">
-				<search>
-				<input type="text" class="search-txt" placeholder="Pesquisar">
-				<a href="#" class="search-btn">
-					<img src="loupe.png" alt="Lupa" height="20" width="20">
-				</a>
-				</search>
- 			</div>
-			<button class="botao" onclick="Menu()"><b>&#9776</b></button>
-			<img style="display: block; position: absolute; top: 50px; left: 30px; border: 0; margin: auto;" src="logo_pet2.png" width="50" height="50">
-            <h1 id="titulo1" style="position: relative; text-align: left; left: 120px;"><b>Pet Planet</b></h1>
-			
-            <nav class="menu-lateral" id="menuLateral">
-			  	<ul>
-			    	<li><a href="login.html" target="_blank">Login</a></li>
-			    	<li><a href="#">Link 2</a></li>
-			    	<li><a href="#">Link 3</a></li>
-					<li><a id="fechar-menu-lat" onclick="fecharMenu()" onmouseover="style='color:#ff0000;'" onmouseout="style='color: #333;'">Fechar</a></li>
-			  	</ul>
-			</nav>
-			<nav class="menu-superior">
-				<ul>
-				    <li class="aba cachorro">
-				    	<a href="https://munhozlimagustavo.wixsite.com/loja-pet-planet" target="_blank">
-				    	<img src="./imagens/dog.png" alt="Cachorros" class="icone-menu">
-				    	Cachorros
-				      </a>
-				    </li>
-				    <li class="aba gato">
-				      	<a href="https://www.zeenow.com.br/gatos/" target="_blank">
-				        <img src="./imagens/cat.png" alt="Gatos" class="icone-menu">
-				        Gatos
-				      </a>
-				    </li>
-				    <li class="aba aves">
-				      	<a href="https://raposonutricao.com.br/?gad_source=1&gad_campaignid=20765277241" target="_blank">
-				        <img src="./imagens/bird.png" alt="Aves" class="icone-menu">
-				        Aves
-				      </a>
-				    </li>
-				    <li class="aba peixes">
-				      	<a href="https://poytara.com/?gad_source=1&gad_campaignid=19022444615" target="_blank">
-				        <img src="./imagens/fish.png" alt="Peixes" class="icone-menu">
-				        Peixes
-				      </a>
-				    </li>
-				    <li class="aba exoticos">
-				      	<a href="https://www.ezootique.com.br/racoes-e-petiscos" target="_blank">
-				        <img src="./imagens/exotic.png" alt="Exóticos" class="icone-menu">
-				        Exóticos
-				      </a>
-				    </li>
-				    <li class="aba casaejardim">
-				      	<a href="https://www.vidapaisagismo.com.br/" target="_blank">
-				        <img src="./imagens/handg.png" alt="Casa e Jardim" class="icone-menu">
-				        Casa & Jardim
-				      </a>
-				    </li>
-				</ul>
-			</nav>
-			<br>
-			<div class="grid-container">
-				<svg width="250" height="332" xmlns="http://www.w3.org/2000/svg">
-					<rect width="200" height="280" x="50" y="50" rx="20" ry="20" fill="#f9f9f9"/>
-					<foreignobject x="20" y="75" width="250" height="332">
-						<body xmlns="http://www.w3.org/1999/xhtml">
-							<div><a href="https://maps.google.com/"><img id="cachorroO" style="display: block; margin: auto; align-items: center;" src="cachorro.png" alt="cachorro" width="150" height="150">
-							<p style="text-align: center; font-weight: bold; font-size: 20px;"></a>Ache seu pet</p></div>
-						</body>
-					</foreignobject>
-				</svg>
-				<svg width="250" height="332" xmlns="http://www.w3.org/2000/svg">
-					<rect width="200" height="280" x="50" y="50" rx="20" ry="20" fill="#f9f9f9"/>
-					<foreignobject x="20" y="75" width="250" height="332">
-						<body xmlns="http://www.w3.org/1999/xhtml">
-							<div><a href="https://unimed.com.br/"><img style="display: block; margin: auto; align-items: center;" src="medico.png" alt="medico" width="150" height="150">
-							<p style="text-align: center; font-weight: bold; font-size: 20px;"></a>Assistência médica</p></div>
-						</body>
-					</foreignobject>
-				</svg>
-				<svg width="250" height="332" xmlns="http://www.w3.org/2000/svg">
-					<rect width="200" height="280" x="50" y="50" rx="20" ry="20" fill="#f9f9f9"/>
-					<foreignobject x="20" y="75" width="250" height="332">
-						<body xmlns="http://www.w3.org/1999/xhtml">
-							<div><a href="https://petz.com.br/"><img style="display: block; margin: auto; align-items: center;" src="brinquedos.png" alt="brinquedos" width="150" height="150">
-							<p style="text-align: center; font-weight: bold; font-size: 20px;"></a>Loja virtual</p></div>
-						</body>
-					</foreignobject>
-				</svg>
-				<svg width="250" height="332" xmlns="http://www.w3.org/2000/svg">
-					<rect width="200" height="280" x="50" y="50" rx="20" ry="20" fill="#f9f9f9"/>
-					<foreignobject x="20" y="75" width="265" height="332">
-						<body xmlns="http://www.w3.org/1999/xhtml">
-							<div><a href="https://maps.google.com/"><img style="display: block; margin: auto; align-items: center;" src="petshop.png" alt="petshop" width="170" height="150">
-							<p style="text-align: center; font-weight: bold; font-size: 20px;"></a>Lojas por perto</p></div>
-						</body>
-					</foreignobject>
-				</svg>
-				<svg width="250" height="332" xmlns="http://www.w3.org/2000/svg">
-					<rect width="200" height="280" x="50" y="50" rx="20" ry="20" fill="#f9f9f9"/>
-					<foreignobject x="20" y="75" width="260" height="332">
-						<body xmlns="http://www.w3.org/1999/xhtml">
-							<div><a href="https://caesegatos.com.br/"><img style="display: block; margin: auto; align-items: center;" src="noticias.png" alt="noticias" width="170" height="150">
-							<p style="text-align: center; font-weight: bold; font-size: 20px;"></a>Notícias</p></div>
-						</body>
-					</foreignobject>
-				</svg>
-			<div>	
-            <svg style="cursor: pointer;" target="_blank" onclick="descubraMais()" class="descubraMais" width="400" height="100">
-					<rect width="400" height="100" style="fill:rgb(52,100,196); border-radius: 25px;" />
-			  		<foreignobject x="0" y="0" width="200" height="50">
-			            <body xmlns="http://www.w3.org/1999/xhtml">
-			                <div style="font-size: 20px; text-align: center;"><b>Descubra Mais...</b></div>
-			            </body>
-			        </foreignobject>
-			  Pão de queijo.
-			</svg>
-			<p style="position: fixed; right: 20px; bottom: 0; font-size: x-small; text-align: bottom;">₢ ETEC Dep. Ary de Camargo Pedroso</p>
-			<a href="ajuda.html" target="_blank" style="position: fixed; left: 20px; bottom: 0; font-size: medium; text-align: bottom; color: black;">Ajuda <img src="help.png" style="position: absolute; bottom: 0px"alt="help" width="20px" height="20px"></a>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pet Planet - Tudo para seu animal de estimação</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #4CAF50;
+            --secondary: #2196F3;
+            --accent: #FF9800;
+            --dark: #333;
+            --light: #f8f9fa;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--light);
+        }
+        
+        .navbar {
+            backdrop-filter: blur(10px);
+            background-color: rgba(255, 255, 255, 0.9);
+        }
+        
+        .btn-primary {
+            background-color: var(--primary);
+        }
+        
+        .btn-secondary {
+            background-color: var(--secondary);
+        }
+        
+        .btn-accent {
+            background-color: var(--accent);
+        }
+        
+        .pet-card {
+            transition: all 0.3s ease;
+        }
+        
+        .pet-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+        }
+        
+        .product-card {
+            transition: all 0.3s ease;
+        }
+        
+        .product-card:hover {
+            transform: scale(1.03);
+        }
+        
+        #map {
+            height: 500px;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+        
+        .chat-message {
+            max-width: 70%;
+            word-wrap: break-word;
+        }
+        
+        .active-tab {
+            border-bottom: 3px solid var(--primary);
+        }
+        
+        .tab-content {
+            display: none;
+        }
+        
+        .tab-content.active {
+            display: block;
+            animation: fadeIn 0.5s;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        
+        /* Estilo para o ícone flutuante de chat */
+        .chat-float {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            z-index: 1000;
+        }
+    </style>
+</head>
+<body>
+    <!-- Barra de navegação -->
+    <nav class="navbar fixed top-0 w-full z-50 shadow-md">
+        <div class="container mx-auto px-4 py-2 flex justify-between items-center">
+            <div class="flex items-center">
+                <a href="#" class="flex items-center">
+                    <span class="text-2xl font-bold text-green-600"><i class="fas fa-paw mr-2"></i>Pet Planet</span>
+                </a>
+            </div>
+            
+            <div class="hidden md:flex space-x-6">
+                <a href="home.html" class="text-green-700 hover:text-green-600 active-tab">Início</a>
+                <a href="lost-pets.html" class="text-gray-700 hover:text-green-600">Animais Perdidos</a>
+                <a href="#vet" class="text-gray-700 hover:text-green-600">Vet Online</a>
+                <a href="#shop" class="text-gray-700 hover:text-green-600">Loja</a>
+                <a href="#garden" class="text-gray-700 hover:text-green-600">Jardinagem</a>
+                <a href="#partners" class="text-gray-700 hover:text-green-600">Parceiros</a>
+                <a href="#forum" class="text-gray-700 hover:text-green-600">Fórum</a>
+            </div>
+            
+            <div class="flex items-center space-x-4">
+                <div id="login-area" class="flex items-center">
+                    <button onclick="showLoginModal()" class="bg-green-600 text-white px-4 py-2 rounded-md hover:bg-green-700 transition">Entrar</button>
+                </div>
+                <div id="user-area" class="hidden items-center">
+                    <div class="relative group">
+                        <img id="user-avatar" src="https://placehold.co/40" alt="Foto de perfil do usuário" class="rounded-full cursor-pointer">
+                        <div class="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg py-2 z-50 hidden group-hover:block">
+                            <a href="#profile" class="block px-4 py-2 text-gray-800 hover:bg-gray-100">Meu Perfil</a>
+                            <a href="#orders" class="block px-4 py-2 text-gray-800 hover:bg-gray-100">Meus Pedidos</a>
+                            <button onclick="logout()" class="w-full text-left block px-4 py-2 text-gray-800 hover:bg-gray-100">Sair</button>
+                        </div>
+                    </div>
+                </div>
+                <button class="md:hidden text-gray-700" id="mobile-menu-button">
+                    <i class="fas fa-bars"></i>
+                </button>
+            </div>
         </div>
-	</body>
-	<script>
-        let loading;
+        
+        <!-- Mobile menu -->
+        <div class="md:hidden hidden bg-white w-full px-4 py-2 shadow-md" id="mobile-menu">
+            <a href="#home" class="block py-2 text-gray-700">Início</a>
+            <a href="#lost-pets" class="block py-2 text-gray-700">Animais Perdidos</a>
+            <a href="#vet" class="block py-2 text-gray-700">Vet Online</a>
+            <a href="#shop" class="block py-2 text-gray-700">Loja</a>
+            <a href="#garden" class="block py-2 text-gray-700">Jardinagem</a>
+            <a href="#partners" class="block py-2 text-gray-700">Parceiros</a>
+            <a href="#forum" class="block py-2 text-gray-700">Fórum</a>
+        </div>
+    </nav>
 
-		function Menu() {
-			const botao = document.querySelector(".botao");
-			if (botao) {
-			botao.style.transform = "rotate(90deg)";
-			document.getElementById('menuLateral').style.left = "0px";
-			}
-		}
+    <!-- Conteúdo principal -->
+    <div class="container mx-auto px-4 pt-24 pb-12">
+        <!-- Seção Home -->
+        <div id="home-content" class="tab-content active">
+            <section class="py-12">
+                <div class="flex flex-col md:flex-row items-center">
+                    <div class="md:w-1/2 mb-8 md:mb-0">
+                        <h1 class="text-4xl md:text-5xl font-bold text-gray-800 mb-6">Seu Pet Merece o Melhor</h1>
+                        <p class="text-lg text-gray-600 mb-8">No Pet Planet, oferecemos tudo o que seu animal de estimação precisa para uma vida saudável e feliz. Desde produtos premium até assistência médica especializada.</p>
+                        <div class="flex space-x-4">
+                            <a href="#shop" class="bg-green-600 text-white px-6 py-3 rounded-md hover:bg-green-700 transition">Conheça Nossa Loja</a>
+                            <a href="#vet" class="bg-blue-600 text-white px-6 py-3 rounded-md hover:bg-blue-700 transition">Veterinário Online</a>
+                        </div>
+                    </div>
+                    <div class="md:w-1/2">
+                        <img src="https://placehold.co/800x500" alt="Vários animais de estimação incluindo cães, gatos e pássaros em um ambiente feliz e colorido" class="rounded-lg shadow-xl">
+                    </div>
+                </div>
+            </section>
+            
+            <section class="py-12 bg-gray-50 rounded-xl px-6">
+                <h2 class="text-3xl font-bold text-center mb-12 text-gray-800">Nossos Serviços</h2>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                    <div class="bg-white p-6 rounded-lg shadow-md pet-card">
+                        <i class="fas fa-search text-4xl text-orange-500 mb-4"></i>
+                        <h3 class="text-xl font-semibold mb-3">Animais Perdidos</h3>
+                        <p class="text-gray-600">Ajude a encontrar animais perdidos ou encontre seu pet desaparecido em nossa comunidade.</p>
+                        <a href="#lost-pets" class="text-green-600 mt-4 inline-block font-medium">Saiba mais</a>
+                    </div>
+                    
+                    <div class="bg-white p-6 rounded-lg shadow-md pet-card">
+                        <i class="fas fa-heartbeat text-4xl text-red-500 mb-4"></i>
+                        <h3 class="text-xl font-semibold mb-3">Assistência Veterinária</h3>
+                        <p class="text-gray-600">Consultas online com veterinários especializados, sem sair de casa.</p>
+                        <a href="#vet" class="text-green-600 mt-4 inline-block font-medium">Agendar consulta</a>
+                    </div>
+                    
+                    <div class="bg-white p-6 rounded-lg shadow-md pet-card">
+                        <i class="fas fa-store text-4xl text-blue-500 mb-4"></i>
+                        <h3 class="text-xl font-semibold mb-3">Loja Completa</h3>
+                        <p class="text-gray-600">Tudo o que seu pet precisa em um só lugar, com entrega rápida.</p>
+                        <a href="#shop" class="text-green-600 mt-4 inline-block font-medium">Ver produtos</a>
+                    </div>
+                </div>
+            </section>
+            
+            <section class="py-12">
+                <h2 class="text-3xl font-bold text-center mb-12 text-gray-800">Animais para Adoção</h2>
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+                    <div class="bg-white rounded-lg overflow-hidden shadow-md pet-card">
+                        <div class="relative">
+                            <img src="rooster.jpg" alt="Cachorro vira-lata caramelo com olhos expressivos esperando por um lar" class="w-full h-48 object-cover">
+                            <span class="absolute top-2 right-2 bg-green-500 text-white text-xs px-2 py-1 rounded">Disponível</span>
+                        </div>
+                        <div class="p-4">
+                            <h3 class="font-semibold text-lg mb-1">Jorge</h3>
+                            <p class="text-gray-600 text-sm mb-2">Macho Alfa, 24 anos</p>
+                            <p class="text-gray-700 mb-4">Cachorro dócil que adora crianças e outros animais.</p>
+                            <button class="w-full bg-green-600 text-white py-2 rounded hover:bg-green-700 transition" onclick="adotar1()">Quero adotar</button>
+                        </div>
+                    </div>
+                    
+                    <div class="bg-white rounded-lg overflow-hidden shadow-md pet-card">
+                        <div class="relative">
+                            <img src="luna.jpg" alt="Gato siamês elegante com pelos creme e pontos escuros descansando em uma cadeira" class="w-full h-48 object-cover">
+                            <span class="absolute top-2 right-2 bg-green-500 text-white text-xs px-2 py-1 rounded">Disponível</span>
+                        </div>
+                        <div class="p-4">
+                            <h3 class="font-semibold text-lg mb-1">Roberta Abecedário</h3>
+                            <p class="text-gray-600 text-sm mb-2">Fêmea empoderada, 19 ano</p>
+                            <p class="text-gray-700 mb-4">Gata tranquila que adora brincar com bolinhas de lã.</p>
+                            <button class="w-full bg-green-600 text-white py-2 rounded hover:bg-green-700 transition" onclick="adotar2()">Quero adotar</button>
+                        </div>
+                    </div>
+                    
+                    <div class="bg-white rounded-lg overflow-hidden shadow-md pet-card">
+                        <div class="relative">
+                            <img src="ave.jpg" alt="Calopsita amarela com bochechas rosadas empoleirada em um galho" class="w-full h-48 object-cover">
+                            <span class="absolute top-2 right-2 bg-green-500 text-white text-xs px-2 py-1 rounded">Disponível</span>
+                        </div>
+                        <div class="p-4">
+                            <h3 class="font-semibold text-lg mb-1">Joelington</h3>
+                            <p class="text-gray-600 text-sm mb-2">Homem Cisgênero, 69 anos</p>
+                            <p class="text-gray-700 mb-4">Calopsita que já sabe assobiar algumas músicas.</p>
+                            <button class="w-full bg-green-600 text-white py-2 rounded hover:bg-green-700 transition" onclick="adotar3()">Quero adotar</button>
+                        </div>
+                    </div>
+                    
+                    <div class="bg-white rounded-lg overflow-hidden shadow-md pet-card">
+                        <div class="relative">
+                            <img src="coelho.jpg" alt="Coelho branco fofo com orelhas rosadas em um jardim bem cuidado" class="w-full h-48 object-cover">
+                            <span class="absolute top-2 right-2 bg-green-500 text-white text-xs px-2 py-1 rounded">Disponível</span>
+                        </div>
+                        <div class="p-4">
+                            <h3 class="font-semibold text-lg mb-1">Flordelis</h3>
+                            <p class="text-gray-600 text-sm mb-2">Fêmea, 2 anos</p>
+                            <p class="text-gray-700 mb-4">Coelha mansa que adora cenouras e brincar no jardim.</p>
+                            <button class="w-full bg-green-600 text-white py-2 rounded hover:bg-green-700 transition" onclick="adotar4()">Quero adotar</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="text-center mt-8">
+                    <a href="#" class="inline-block bg-blue-600 text-white px-6 py-3 rounded-md hover:bg-blue-700 transition">Ver todos os animais</a>
+                </div>
+            </section>
+        </div>
+        
+        <!-- Seção Animais Perdidos -->
+        <div id="lost-pets-content" class="tab-content">
+            <section class="py-8">
+                <h2 class="text-3xl font-bold mb-6 text-gray-800">Animais Perdidos/Encontrados</h2>
+                
+                <div class="bg-white rounded-lg shadow-md p-6 mb-8">
+                    <h3 class="text-xl font-semibold mb-4">Postar Animal Perdido/Encontrado</h3>
+                    <form id="lost-pet-form">
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <div>
+                                <label class="block text-gray-700 mb-2" for="pet-type">Tipo de Animal</label>
+                                <select id="pet-type" class="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-green-600">
+                                    <option value="">Selecione</option>
+                                    <option value="dog">Cachorro</option>
+                                    <option value="cat">Gato</option>
+                                    <option value="bird">Pássaro/Ave</option>
+                                    <option value="other">Outro</option>
+                                </select>
+                            </div>
+                            
+                            <div>
+                                <label class="block text-gray-700 mb-2" for="pet-status">Status</label>
+                                <select id="pet-status" class="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-green-600">
+                                    <option value="lost">Perdido</option>
+                                    <option value="found">Encontrado</option>
+                                </select>
+                            </div>
+                            
+                            <div>
+                                <label class="block text-gray-700 mb-2" for="pet-name">Nome (se souber)</label>
+                                <input type="text" id="pet-name" class="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-green-600">
+                            </div>
+                            
+                            <div>
+                                <label class="block text-gray-700 mb-2" for="pet-breed">Raça/Aparência</label>
+                                <input type="text" id="pet-breed" class="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-green-600">
+                            </div>
+                            
+                            <div>
+                                <label class="block text-gray-700 mb-2" for="pet-location">Localização</label>
+                                <input type="text" id="pet-location" class="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-green-600" placeholder="Bairro, cidade, ponto de referência">
+                            </div>
+                            
+                            <div>
+                                <label class="block text-gray-700 mb-2" for="pet-date">Data do ocorrido</label>
+                                <input type="date" id="pet-date" class="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-green-600">
+                            </div>
+                        </div>
+                        
+                        <div class="mt-4">
+                            <label class="block text-gray-700 mb-2" for="pet-description">Descrição/Detalhes</label>
+                            <textarea id="pet-description" rows="4" class="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-green-600" placeholder="Descreva características marcantes, comportamento, coleira, etc."></textarea>
+                        </div>
+                        
+                        <div class="mt-4">
+                            <label class="block text-gray-700 mb-2">Foto do Animal</label>
+                            <div class="border-2 border-dashed rounded-md p-4 text-center">
+                                <input type="file" id="pet-photo" class="hidden" accept="image/*">
+                                <label for="pet-photo" class="cursor-pointer flex flex-col items-center">
+                                    <i class="fas fa-cloud-upload-alt text-4xl text-gray-400 mb-2"></i>
+                                    <span class="text-gray-600">Clique para enviar foto</span>
+                                    <span class="text-sm text-gray-500">Formatos: JPG, PNG (Max 5MB)</span>
+                                </label>
+                            </div>
+                        </div>
+                        
+                        <div class="mt-6">
+                            <button type="submit" class="bg-green-600 text-white px-6 py-3 rounded-md hover:bg-green-700 transition">Enviar Postagem</button>
+                        </div>
+                    </form>
+                </div>
+                
+                <h3 class="text-2xl font-semibold mb-4 text-gray-800">Últimas Postagens</h3>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6" id="lost-pets-list">
+                    <!-- Posts serão carregados aqui via JavaScript -->
+                </div>
+                
+                <div class="mt-8 text-center">
+                    <button id="load-more-pets" class="bg-blue-600 text-white px-6 py-2 rounded-md hover:bg-blue-700 transition">Carregar Mais</button>
+                </div>
+            </section>
+        </div>
+        
+        <!-- Seção Veterinário Online -->
+        <div id="vet-content" class="tab-content">
+            <section class="py-8">
+                <h2 class="text-3xl font-bold mb-6 text-gray-800">Assistência Veterinária Online</h2>
+                
+                <div class="bg-white rounded-lg shadow-md p-6 mb-8">
+                    <div class="flex flex-col md:flex-row items-center mb-6">
+                        <div class="md:w-1/2 mb-4 md:mb-0">
+                            <h3 class="text-xl font-semibold mb-3">Consulta Virtual com Especialistas</h3>
+                            <p class="text-gray-600 mb-4">Converse com veterinários certificados sem sair de casa, através de vídeo, chat ou áudio.</p>
+                            <ul class="list-disc pl-5 text-gray-600 mb-4">
+                                <li>Consultas para emergências e dúvidas</li>
+                                <li>Receitas digitais válidas</li>
+                                <li>Orientação nutricional</li>
+                                <li>Acompanhamento pós-operatório</li>
+                            </ul>
+                        </div>
+                        <div class="md:w-1/2">
+                            <img src="https://placehold.co/600x400" alt="Veterinário sorridente usando computador enquanto examina um cachorro saudável" class="rounded-lg">
+                        </div>
+                    </div>
+                    
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+                        <div class="bg-gray-50 p-4 rounded-lg text-center">
+                            <i class="fas fa-user-md text-4xl text-green-600 mb-3"></i>
+                            <h4 class="font-semibold mb-2">Mais de 50 Veterinários</h4>
+                            <p class="text-gray-600">Profissionais especializados em diferentes áreas</p>
+                        </div>
+                        
+                        <div class="bg-gray-50 p-4 rounded-lg text-center">
+                            <i class="fas fa-clock text-4xl text-blue-600 mb-3"></i>
+                            <h4 class="font-semibold mb-2">24 Horas por Dia</h4>
+                            <p class="text-gray-600">Atendimento emergencial a qualquer momento</p>
+                        </div>
+                        
+                        <div class="bg-gray-50 p-4 rounded-lg text-center">
+                            <i class="fas fa-stethoscope text-4xl text-orange-500 mb-3"></i>
+                            <h4 class="font-semibold mb-2">Diversas Especialidades</h4>
+                            <p class="text-gray-600">Clínico geral, dermatologia, ortopedia e mais</p>
+                        </div>
+                    </div>
+                    
+                    <h3 class="text-xl font-semibold mb-4">Agende sua Consulta</h3>
+                    <form id="vet-appointment-form">
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <div>
+                                <label class="block text-gray-700 mb-2" for="pet-for-appointment">Pet</label>
+                                <select id="pet-for-appointment" class="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-green-600">
+                                    <option value="">Selecione seu pet</option>
+                                    <option value="1">Rex (Cachorro - Labrador)</option>
+                                    <option value="2">Mingau (Gato - Siamês)</option>
+                                    <option value="3">Piu (Calopsita)</option>
+                                </select>
+                            </div>
+                            
+                            <div>
+                                <label class="block text-gray-700 mb-2" for="vet-specialty">Especialidade</label>
+                                <select id="vet-specialty" class="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-green-600">
+                                    <option value="">Selecione</option>
+                                    <option value="general">Clínico Geral</option>
+                                    <option value="dermatology">Dermatologia</option>
+                                    <option value="nutrition">Nutrição</option>
+                                    <option value="emergency">Emergência</option>
+                                </select>
+                            </div>
+                            
+                            <div>
+                                <label class="block text-gray-700 mb-2" for="appointment-date">Data</label>
+                                <input type="date" id="appointment-date" class="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-green-600">
+                            </div>
+                            
+                            <div>
+                                <label class="block text-gray-700 mb-2" for="appointment-time">Horário</label>
+                                <select id="appointment-time" class="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-green-600">
+                                    <option value="">Selecione</option>
+                                    <option value="08:00">08:00</option>
+                                    <option value="10:00">10:00</option>
+                                    <option value="12:00">12:00</option>
+                                    <option value="14:00">14:00</option>
+                                    <option value="16:00">16:00</option>
+                                    <option value="18:00">18:00</option>
+                                </select>
+                            </div>
+                            
+                            <div class="md:col-span-2">
+                                <label class="block text-gray-700 mb-2" for="appointment-reason">Motivo da Consulta</label>
+                                <textarea id="appointment-reason" rows="3" class="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-green-600"></textarea>
+                            </div>
+                        </div>
+                        
+                        <div class="mt-6">
+                            <button type="submit" class="bg-green-600 text-white px-6 py-3 rounded-md hover:bg-green-700 transition">Agendar Consulta</button>
+                        </div>
+                    </form>
+                </div>
+                
+                <div class="bg-white rounded-lg shadow-md p-6">
+                    <h3 class="text-xl font-semibold mb-4">Nossos Veterinários</h3>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+                        <div class="bg-gray-50 rounded-lg p-4 text-center">
+                            <img src="https://placehold.co/150" alt="Dra. Carla Silva, médica veterinária especializada em clínica geral" class="w-32 h-32 rounded-full mx-auto mb-3">
+                            <h4 class="font-semibold">Dra. Carla Silva</h4>
+                            <p class="text-gray-600 mb-2">Clínica Geral</p>
+                            <p class="text-sm text-gray-500">CRMV-SP 12345</p>
+                            <div class="mt-3 flex justify-center space-x-2">
+                                <span class="bg-green-100 text-green-800 text-xs px-2 py-1 rounded">Cães</span>
+                                <span class="bg-blue-100 text-blue-800 text-xs px-2 py-1 rounded">Gatos</span>
+                                <span class="bg-yellow-100 text-yellow-800 text-xs px-2 py-1 rounded">Aves</span>
+                            </div>
+                        </div>
+                        
+                        <div class="bg-gray-50 rounded-lg p-4 text-center">
+                            <img src="https://placehold.co/150" alt="Dr. Marcos Oliveira, veterinário especializado em dermatologia animal" class="w-32 h-32 rounded-full mx-auto mb-3">
+                            <h4 class="font-semibold">Dr. Marcos Oliveira</h4>
+                            <p class="text-gray-600 mb-2">Dermatologia</p>
+                            <p class="text-sm text-gray-500">CRMV-RJ 67890</p>
+                            <div class="mt-3 flex justify-center space-x-2">
+                                <span class="bg-green-100 text-green-800 text-xs px-2 py-1 rounded">Cães</span>
+                                <span class="bg-blue-100 text-blue-800 text-xs px-2 py-1 rounded">Gatos</span>
+                                <span class="bg-purple-100 text-purple-800 text-xs px-2 py-1 rounded">Exóticos</span>
+                            </div>
+                        </div>
+                        
+                        <div class="bg-gray-50 rounded-lg p-4 text-center">
+                            <img src="https://placehold.co/150" alt="Dra. Ana Costa, veterinária especializada em nutrição animal" class="w-32 h-32 rounded-full mx-auto mb-3">
+                            <h4 class="font-semibold">Dra. Ana Costa</h4>
+                            <p class="text-gray-600 mb-2">Nutrição</p>
+                            <p class="text-sm text-gray-500">CRMV-MG 54321</p>
+                            <div class="mt-3 flex justify-center space-x-2">
+                                <span class="bg-green-100 text-green-800 text-xs px-2 py-1 rounded">Cães</span>
+                                <span class="bg-blue-100 text-blue-800 text-xs px-2 py-1 rounded">Gatos</span>
+                                <span class="bg-red-100 text-red-800 text-xs px-2 py-1 rounded">Roedores</span>
+                            </div>
+                        </div>
+                        
+                        <div class="bg-gray-50 rounded-lg p-4 text-center">
+                            <img src="https://placehold.co/150" alt="Dr. Pedro Santos, veterinário especializado em emergências e cuidados intensivos" class="w-32 h-32 rounded-full mx-auto mb-3">
+                            <h4 class="font-semibold">Dr. Pedro Santos</h4>
+                            <p class="text-gray-600 mb-2">Emergências</p>
+                            <p class="text-sm text-gray-500">CRMV-SP 98765</p>
+                            <div class="mt-3 flex justify-center space-x-2">
+                                <span class="bg-green-100 text-green-800 text-xs px-2 py-1 rounded">Cães</span>
+                                <span class="bg-blue-100 text-blue-800 text-xs px-2 py-1 rounded">Gatos</span>
+                                <span class="bg-indigo-100 text-indigo-800 text-xs px-2 py-1 rounded">Répteis</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+        
+        <!-- Seção Loja Virtual -->
+        <div id="shop-content" class="tab-content">
+            <section class="py-8">
+                <h2 class="text-3xl font-bold mb-6 text-gray-800">Loja Virtual Pet Planet</h2>
+                
+                <div class="flex flex-col md:flex-row mb-8">
+                    <div class="md:w-1/4 mb-4 md:mb-0">
+                        <div class="bg-white rounded-lg shadow-md p-4">
+                            <h3 class="font-semibold mb-4">Categorias</h3>
+                            <ul class="space-y-2">
+                                <li><a href="#dogs" class="block p-2 hover:bg-gray-100 rounded">Cachorros</a></li>
+                                <li><a href="#cats" class="block p-2 hover:bg-gray-100 rounded">Gatos</a></li>
+                                <li><a href="#birds" class="block p-2 hover:bg-gray-100 rounded">Pássaros/Aves</a></li>
+                                <li><a href="#exotics" class="block p-2 hover:bg-gray-100 rounded">Animais Exóticos</a></li>
+                                <li><a href="#aquarium" class="block p-2 hover:bg-gray-100 rounded">Aquários</a></li>
+                            </ul>
+                            
+                            <h3 class="font-semibold mt-6 mb-4">Filtrar por</h3>
+                            <div class="space-y-4">
+                                <div>
+                                    <h4 class="font-medium mb-2">Preço</h4>
+                                    <div class="flex items-center justify-between space-x-2">
+                                        <input type="number" placeholder="Mín" class="w-full px-2 py-1 border rounded">
+                                        <span>-</span>
+                                        <input type="number" placeholder="Máx" class="w-full px-2 py-1 border rounded">
+                                    </div>
+                                </div>
+                                
+                                <div>
+                                    <h4 class="font-medium mb-2">Marcas</h4>
+                                    <div class="space-y-2">
+                                        <label class="flex items-center">
+                                            <input type="checkbox" class="mr-2">
+                                            <span>PremiumPet</span>
+                                        </label>
+                                        <label class="flex items-center">
+                                            <input type="checkbox" class="mr-2">
+                                            <span>Natureza</span>
+                                        </label>
+                                        <label class="flex items-center">
+                                            <input type="checkbox" class="mr-2">
+                                            <span>Golden</span>
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <button class="w-full mt-6 bg-green-600 text-white py-2 rounded hover:bg-green-700 transition">Aplicar Filtros</button>
+                        </div>
+                    </div>
+                    
+                    <div class="md:w-3/4 md:pl-6">
+                        <div class="flex justify-between items-center mb-6">
+                            <h3 class="text-xl font-semibold">Produtos em Destaque</h3>
+                            <div class="relative">
+                                <select class="appearance-none bg-white border rounded-md px-4 py-2 pr-8 focus:outline-none">
+                                    <option>Ordenar por: Mais vendidos</option>
+                                    <option>Ordenar por: Menor preço</option>
+                                    <option>Ordenar por: Maior preço</option>
+                                    <option>Ordenar por: Avaliações</option>
+                                </select>
+                                <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700">
+                                    <i class="fas fa-chevron-down"></i>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6" id="shop-products">
+                            <!-- Produtos serão carregados aqui via JavaScript -->
+                        </div>
+                        
+                        <div class="mt-8 text-center">
+                            <button id="load-more-products" class="bg-blue-600 text-white px-6 py-2 rounded-md hover:bg-blue-700 transition">Carregar Mais Produtos</button>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="bg-white rounded-lg shadow-md p-6">
+                    <div class="flex items-center mb-6">
+                        <h3 class="text-xl font-semibold">Meu Carrinho</h3>
+                        <span id="cart-count" class="ml-2 bg-green-600 text-white text-xs px-2 py-1 rounded-full">0</span>
+                    </div>
+                    
+                    <div id="cart-items">
+                        <p class="text-center text-gray-500 py-8">Seu carrinho está vazio</p>
+                    </div>
+                    
+                    <div id="cart-summary" class="bg-gray-50 rounded-lg p-4 mt-4 hidden">
+                        <div class="flex justify-between mb-2">
+                            <span>Subtotal:</span>
+                            <span id="cart-subtotal">R$ 0,00</span>
+                        </div>
+                        <div class="flex justify-between mb-2">
+                            <span>Frete:</span>
+                            <span id="cart-shipping">R$ 0,00</span>
+                        </div>
+                        <div class="flex justify-between font-semibold text-lg">
+                            <span>Total:</span>
+                            <span id="cart-total">R$ 0,00</span>
+                        </div>
+                        
+                        <div class="mt-6">
+                            <button id="checkout-btn" class="w-full bg-green-600 text-white py-3 rounded hover:bg-green-700 transition">Finalizar Compra</button>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+        
+        <!-- Seção Jardinagem -->
+        <div id="garden-content" class="tab-content">
+            <section class="py-8">
+                <h2 class="text-3xl font-bold mb-6 text-gray-800">Jardinagem Pet Friendly</h2>
+                
+                <div class="bg-white rounded-lg shadow-md p-6 mb-8">
+                    <div class="flex flex-col md:flex-row mb-6">
+                        <div class="md:w-1/3 mb-4 md:mb-0">
+                            <img src="https://placehold.co/400x300" alt="Jardim bonito e seguro com plantas não tóxicas para pets em um espaço bem iluminado" class="rounded-lg">
+                        </div>
+                        <div class="md:w-2/3 md:pl-6">
+                            <h3 class="text-xl font-semibold mb-4">Crie um Jardim Seguro para seu Pet</h3>
+                            <p class="text-gray-600 mb-4">Na Pet Planet entendemos que muitos tutores também amam plantas e jardinagem. Por isso, oferecemos produtos e informações para ajudar a criar espaços verdes que sejam seguros para seus animais de estimação.</p>
+                            <div class="grid grid-cols-2 gap-4 mb-4">
+                                <div>
+                                    <i class="fas fa-check-circle text-green-500 mr-2"></i>
+                                    <span>Plantas não tóxicas</span>
+                                </div>
+                                <div>
+                                    <i class="fas fa-check-circle text-green-500 mr-2"></i>
+                                    <span>Fertilizantes seguros</span>
+                                </div>
+                                <div>
+                                    <i class="fas fa-check-circle text-green-500 mr-2"></i>
+                                    <span>Produtos orgânicos</span>
+                                </div>
+                                <div>
+                                    <i class="fas fa-check-circle text-green-500 mr-2"></i>
+                                    <span>Dicas de segurança</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <h3 class="text-xl font-semibold mb-4">Produtos de Jardinagem</h3>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6" id="garden-products">
+                        <!-- Produtos de jardinagem serão carregados aqui via JavaScript -->
+                    </div>
+                </div>
+                
+                <div class="bg-white rounded-lg shadow-md p-6">
+                    <h3 class="text-xl font-semibold mb-4">Plantas Seguras para Pets</h3>
+                    <div class="overflow-x-auto">
+                        <table class="min-w-full bg-white">
+                            <thead>
+                                <tr>
+                                    <th class="py-2 px-4 border-b-2 border-gray-200 bg-gray-50 text-left">Planta</th>
+                                    <th class="py-2 px-4 border-b-2 border-gray-200 bg-gray-50 text-left">Segura para</th>
+                                    <th class="py-2 px-4 border-b-2 border-gray-200 bg-gray-50 text-left">Cuidados</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td class="py-2 px-4 border-b border-gray-200">Orquídea</td>
+                                    <td class="py-2 px-4 border-b border-gray-200">Cães e Gatos</td>
+                                    <td class="py-2 px-4 border-b border-gray-200">Nenhum</td>
+                                </tr>
+                                <tr>
+                                    <td class="py-2 px-4 border-b border-gray-200">Planta-aranha</td>
+                                    <td class="py-2 px-4 border-b border-gray-200">Cães e Gatos</td>
+                                    <td class="py-2 px-4 border-b border-gray-200">Pode causar leve desconforto se ingerida em grande quantidade</td>
+                                </tr>
+                                <tr>
+                                    <td class="py-2 px-4 border-b border-gray-200">Samambaia</td>
+                                    <td class="py-2 px-4 border-b border-gray-200">Cães e Gatos</td>
+                                    <td class="py-2 px-4 border-b border-gray-200">Nenhum</td>
+                                </tr>
+                                <tr>
+                                    <td class="py-2 px-4 border-b border-gray-200">Suculentas (maioria)</td>
+                                    <td class="py-2 px-4 border-b border-gray-200">Cães e Gatos</td>
+                                    <td class="py-2 px-4 border-b border-gray-200">Evitar espécies pontiagudas</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    
+                    <h3 class="text-xl font-semibold mt-8 mb-4">Plantas Perigosas para Evitar</h3>
+                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                        <div class="bg-red-50 p-4 rounded-lg">
+                            <h4 class="font-semibold text-red-700 mb-2">Comigo-ninguém-pode</h4>
+                            <p class="text-red-600">Altamente tóxica para cães e gatos, pode causar irritação severa e problemas respiratórios.</p>
+                        </div>
+                        <div class="bg-red-50 p-4 rounded-lg">
+                            <h4 class="font-semibold text-red-700 mb-2">Espada-de-São-Jorge</h4>
+                            <p class="text-red-600">Pode causar náuseas, vômitos e diarreia em animais.</p>
+                        </div>
+                        <div class="bg-red-50 p-4 rounded-lg">
+                            <h4 class="font-semibold text-red-700 mb-2">Azaleia</h4>
+                            <p class="text-red-600">Tóxica para cães e gatos, podendo levar a problemas cardíacos em casos severos.</p>
+                        </div>
+                        <div class="bg-red-50 p-4 rounded-lg">
+                            <h4 class="font-semibold text-red-700 mb-2">Lírio</h4>
+                            <p class="text-red-600">Especialmente perigoso para gatos, pode causar falência renal.</p>
+                        </div>
+                        <div class="bg-red-50 p-4 rounded-lg">
+                            <h4 class="font-semibold text-red-700 mb-2">Bico-de-papagaio</h4>
+                            <p class="text-red-600">Sua seiva pode causar irritação na pele e problemas digestivos.</p>
+                        </div>
+                        <div class="bg-red-50 p-4 rounded-lg">
+                            <h4 class="font-semibold text-red-700 mb-2">Copo-de-leite</h4>
+                            <p class="text-red-600">Contém cristais que podem causar irritação intensa na boca e trato digestivo.</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+        
+        <!-- Seção Parceiros -->
+        <div id="partners-content" class="tab-content">
+            <section class="py-8">
+                <h2 class="text-3xl font-bold mb-6 text-gray-800">Petshops Parceiros</h2>
+                
+                <div class="bg-white rounded-lg shadow-md p-6 mb-8">
+                    <div class="flex flex-col md:flex-row mb-6">
+                        <div class="md:w-1/2 mb-4 md:mb-0">
+                            <h3 class="text-xl font-semibold mb-4">Encontre Parceiros Pet Planet</h3>
+                            <p class="text-gray-600 mb-4">Nossa rede de petshops parceiros oferece produtos e serviços de qualidade em todo o país. Localize a unidade mais próxima de você.</p>
+                            <div class="flex items-center mb-4">
+                                <i class="fas fa-map-marker-alt text-red-500 mr-2"></i>
+                                <input type="text" id="location-search" class="flex-grow px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-green-600" placeholder="Digite sua localização">
+                            </div>
+                            <button id="search-location" class="bg-green-600 text-white px-6 py-2 rounded-md hover:bg-green-700 transition">Buscar</button>
+                        </div>
+                        <div class="md:w-1/2 md:pl-6">
+                            <div id="map" class="h-64 md:h-full">
+                                <!-- Mapa será renderizado aqui via JavaScript -->
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <h3 class="text-xl font-semibold mb-4">Parceiros Próximos</h3>
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-6" id="partner-shops">
+                        <!-- Parceiros serão carregados aqui via JavaScript -->
+                    </div>
+                </div>
+                
+                <div class="bg-white rounded-lg shadow-md p-6">
+                    <h3 class="text-xl font-semibold mb-4">Torne-se um Parceiro Pet Planet</h3>
+                    <p class="text-gray-600 mb-6">Se você tem um petshop e deseja fazer parte da nossa rede de parceiros, preencha o formulário abaixo:</p>
+                    
+                    <form id="partner-form">
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+                            <div>
+                                <label class="block text-gray-700 mb-2" for="partner-name">Nome do Estabelecimento</label>
+                                <input type="text" id="partner-name" class="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-green-600">
+                            </div>
+                            
+                            <div>
+                                <label class="block text-gray-700 mb-2" for="partner-owner">Responsável</label>
+                                <input type="text" id="partner-owner" class="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-green-600">
+                            </div>
+                            
+                            <div>
+                                <label class="block text-gray-700 mb-2" for="partner-email">Email</label>
+                                <input type="email" id="partner-email" class="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-green-600">
+                            </div>
+                            
+                            <div>
+                                <label class="block text-gray-700 mb-2" for="partner-phone">Telefone</label>
+                                <input type="tel" id="partner-phone" class="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-green-600">
+                            </div>
+                            
+                            <div>
+                                <label class="block text-gray-700 mb-2" for="partner-address">Endereço</label>
+                                <input type="text" id="partner-address" class="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-green-600">
+                            </div>
+                            
+                            <div>
+                                <label class="block text-gray-700 mb-2" for="partner-city">Cidade/Estado</label>
+                                <input type="text" id="partner-city" class="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-green-600">
+                            </div>
+                        </div>
+                        
+                        <div class="mb-6">
+                            <label class="block text-gray-700 mb-2" for="partner-services">Serviços Oferecidos</label>
+                            <div class="grid grid-cols-1 sm:grid-cols-3 gap-2">
+                                <label class="flex items-center">
+                                    <input type="checkbox" class="mr-2">
+                                    <span>Banho e Tosa</span>
+                                </label>
+                                <label class="flex items-center">
+                                    <input type="checkbox" class="mr-2">
+                                    <span>Consulta Veterinária</span>
+                                </label>
+                                <label class="flex items-center">
+                                    <input type="checkbox" class="mr-2">
+                                    <span>Venda de Produtos</span>
+                                </label>
+                                <label class="flex items-center">
+                                    <input type="checkbox" class="mr-2">
+                                    <span>Hotel para Pets</span>
+                                </label>
+                                <label class="flex items-center">
+                                    <input type="checkbox" class="mr-2">
+                                    <span>Adestramento</span>
+                                </label>
+                                <label class="flex items-center">
+                                    <input type="checkbox" class="mr-2">
+                                    <span>Outros</span>
+                                </label>
+                            </div>
+                        </div>
+                        
+                        <div class="mb-6">
+                            <label class="block text-gray-700 mb-2" for="partner-message">Mensagem</label>
+                            <textarea id="partner-message" rows="4" class="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-green-600"></textarea>
+                        </div>
+                        
+                        <div class="mb-6">
+                            <label class="block text-gray-700 mb-2">Documentos</label>
+                            <div class="border-2 border-dashed rounded-md p-4 text-center">
+                                <input type="file" id="partner-documents" class="hidden" multiple>
+                                <label for="partner-documents" class="cursor-pointer flex flex-col items-center">
+                                    <i class="fas fa-cloud-upload-alt text-4xl text-gray-400 mb-2"></i>
+                                    <span class="text-gray-600">Clique para enviar documentos</span>
+                                    <span class="text-sm text-gray-500">Formatos: PDF, JPG, PNG (Max 10MB cada)</span>
+                                </label>
+                            </div>
+                        </div>
+                        
+                        <div class="flex justify-end">
+                            <button type="submit" class="bg-green-600 text-white px-6 py-3 rounded-md hover:bg-green-700 transition">Enviar Solicitação</button>
+                        </div>
+                    </form>
+                </div>
+            </section>
+        </div>
+        
+        <!-- Seção Fórum -->
+        <div id="forum-content" class="tab-content">
+            <section class="py-8">
+                <h2 class="text-3xl font-bold mb-6 text-gray-800">Fórum Pet Planet</h2>
+                
+                <div class="bg-white rounded-lg shadow-md p-6 mb-8">
+                    <div class="flex flex-col md:flex-row mb-6">
+                        <div class="md:w-1/4 mb-4 md:mb-0">
+                            <div class="bg-gray-50 rounded-lg p-4">
+                                <h3 class="font-semibold mb-4">Categorias</h3>
+                                <ul class="space-y-2">
+                                    <li><a href="#forum-general" class="block p-2 hover:bg-gray-100 rounded">Geral</a></li>
+                                    <li><a href="#forum-health" class="block p-2 hover:bg-gray-100 rounded">Saúde</a></li>
+                                    <li><a href="#forum-training" class="block p-2 hover:bg-gray-100 rounded">Adestramento</a></li>
+                                    <li><a href="#forum-nutrition" class="block p-2 hover:bg-gray-100 rounded">Nutrição</a></li>
+                                    <li><a href="#forum-events" class="block p-2 hover:bg-gray-100 rounded">Eventos</a></li>
+                                </ul>
+                                
+                                <h3 class="font-semibold mt-6 mb-4">Top Tópicos</h3>
+                                <ul class="space-y-2">
+                                    <li><a href="#forum-top1" class="block p-2 hover:bg-gray-100 rounded text-sm">Melhor ração para filhotes</a></li>
+                                    <li><a href="#forum-top2" class="block p-2 hover:bg-gray-100 rounded text-sm">Como acostumar gato com coleira</a></li>
+                                    <li><a href="#forum-top3" class="block p-2 hover:bg-gray-100 rounded text-sm">Adestramento positivo funciona?</a></li>
+                                </ul>
+                            </div>
+                        </div>
+                        
+                        <div class="md:w-3/4 md:pl-6">
+                            <div class="flex justify-between items-center mb-6">
+                                <h3 class="text-xl font-semibold">Tópicos Recentes</h3>
+                                <button id="new-topic-btn" class="bg-green-600 text-white px-4 py-2 rounded-md hover:bg-green-700 transition">Novo Tópico</button>
+                            </div>
+                            
+                            <div id="forum-topics">
+                                <!-- Tópicos do fórum serão carregados aqui via JavaScript -->
+                            </div>
+                            
+                            <div class="mt-6">
+                                <nav class="flex justify-center">
+                                    <ul class="flex list-style-none">
+                                        <li class="page-item disabled"><a class="page-link cursor-not-allowed" href="#">Anterior</a></li>
+                                        <li class="page-item active"><a class="page-link" href="#">1</a></li>
+                                        <li class="page-item"><a class="page-link" href="#">2</a></li>
+                                        <li class="page-item"><a class="page-link" href="#">3</a></li>
+                                        <li class="page-item"><a class="page-link" href="#">Próximo</a></li>
+                                    </ul>
+                                </nav>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Modal de Novo Tópico (oculto por padrão) -->
+                <div id="new-topic-modal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 hidden">
+                    <div class="bg-white rounded-lg shadow-xl w-full max-w-lg p-6">
+                        <div class="flex justify-between items-center mb-4">
+                            <h3 class="text-xl font-semibold">Novo Tópico</h3>
+                            <button id="close-topic-modal" class="text-gray-500 hover:text-gray-700">
+                                <i class="fas fa-times"></i>
+                            </button>
+                        </div>
+                        
+                        <form id="new-topic-form">
+                            <div class="mb-4">
+                                <label class="block text-gray-700 mb-2" for="topic-title">Título</label>
+                                <input type="text" id="topic-title" class="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-green-600">
+                            </div>
+                            
+                            <div class="mb-4">
+                                <label class="block text-gray-700 mb-2" for="topic-category">Categoria</label>
+                                <select id="topic-category" class="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-green-600">
+                                    <option value="general">Geral</option>
+                                    <option value="health">Saúde</option>
+                                    <option value="training">Adestramento</option>
+                                    <option value="nutrition">Nutrição</option>
+                                    <option value="events">Eventos</option>
+                                </select>
+                            </div>
+                            
+                            <div class="mb-4">
+                                <label class="block text-gray-700 mb-2" for="topic-content">Conteúdo</label>
+                                <textarea id="topic-content" rows="6" class="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-green-600"></textarea>
+                            </div>
+                            
+                            <div class="flex justify-end space-x-4">
+                                <button type="button" id="cancel-topic" class="bg-gray-300 text-gray-700 px-4 py-2 rounded-md hover:bg-gray-400 transition">Cancelar</button>
+                                <button type="submit" class="bg-green-600 text-white px-4 py-2 rounded-md hover:bg-green-700 transition">Publicar</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+                
+                <!-- Visualização de Tópico (oculto por padrão) -->
+                <div id="topic-view" class="hidden bg-white rounded-lg shadow-md p-6">
+                    <div class="flex justify-between items-start mb-6">
+                        <div>
+                            <h3 id="view-topic-title" class="text-xl font-semibold mb-2">Título do Tópico</h3>
+                            <div class="flex items-center text-sm text-gray-500">
+                                <span id="view-topic-author" class="mr-4">Por: Autor</span>
+                                <span id="view-topic-date" class="mr-4">Data: 01/01/2023</span>
+                                <span id="view-topic-category" class="bg-gray-100 px-2 py-1 rounded">Categoria</span>
+                            </div>
+                        </div>
+                        <button id="back-to-forum" class="bg-gray-300 text-gray-700 px-4 py-2 rounded-md hover:bg-gray-400 transition">Voltar</button>
+                    </div>
+                    
+                    <div id="view-topic-content" class="mb-8 p-4 bg-gray-50 rounded-lg">
+                        Conteúdo do tópico será exibido aqui...
+                    </div>
+                    
+                    <h4 class="font-semibold mb-4">Respostas</h4>
+                    <div id="topic-replies">
+                        <!-- Respostas serão carregadas aqui via JavaScript -->
+                    </div>
+                    
+                    <div class="mt-6 border-t pt-4">
+                        <h5 class="font-semibold mb-4">Adicionar Resposta</h5>
+                        <form id="reply-form">
+                            <textarea id="reply-content" rows="4" class="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-green-600 mb-4"></textarea>
+                            <div class="flex justify-end">
+                                <button type="submit" class="bg-green-600 text-white px-4 py-2 rounded-md hover:bg-green-700 transition">Enviar Resposta</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </div>
 
-		function fecharMenu() {
-			const botao = document.querySelector('.botao');
-			if (botao) {
-				botao.style.transform = 'rotate(-180deg)';
-				document.getElementById('menuLateral').style.left = '-300px';
-			}
+    <!-- Rodapé -->
+    <footer class="bg-gray-800 text-white py-12">
+        <div class="container mx-auto px-4">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
+                <div>
+                    <h3 class="text-xl font-semibold mb-4">Pet Planet</h3>
+                    <p class="text-gray-400">Tudo o que seu animal de estimação precisa em um só lugar.</p>
+                    <div class="mt-4 flex space-x-4">
+                        <a href="#" class="text-gray-400 hover:text-white"><i class="fab fa-facebook-f"></i></a>
+                        <a href="#" class="text-gray-400 hover:text-white"><i class="fab fa-instagram"></i></a>
+                        <a href="#" class="text-gray-400 hover:text-white"><i class="fab fa-twitter"></i></a>
+                        <a href="#" class="text-gray-400 hover:text-white"><i class="fab fa-youtube"></i></a>
+                    </div>
+                </div>
+                
+                <div>
+                    <h3 class="text-xl font-semibold mb-4">Links Rápidos</h3>
+                    <ul class="space-y-2">
+                        <li><a href="#home" class="text-gray-400 hover:text-white">Início</a></li>
+                        <li><a href="lost-pets.html" class="text-gray-400 hover:text-white">Animais Perdidos</a></li>
+                        <li><a href="#vet" class="text-gray-400 hover:text-white">Veterinário Online</a></li>
+                        <li><a href="#shop" class="text-gray-400 hover:text-white">Loja Virtual</a></li>
+                        <li><a href="#partners" class="text-gray-400 hover:text-white">Parceiros</a></li>
+                    </ul>
+                </div>
+                
+                <div>
+                    <h3 class="text-xl font-semibold mb-4">Informações</h3>
+                    <ul class="space-y-2">
+                        <li><a href="#" class="text-gray-400 hover:text-white">Sobre Nós</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-white">Termos de Serviço</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-white">Política de Privacidade</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-white">FAQ</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-white">Contato</a></li>
+                    </ul>
+                </div>
+                
+                <div>
+                    <h3 class="text-xl font-semibold mb-4">Newsletter</h3>
+                    <p class="text-gray-400 mb-4">Assine nossa newsletter para receber novidades e promoções.</p>
+                    <form class="flex">
+                        <input type="email" placeholder="Seu email" class="px-4 py-2 rounded-l-md text-gray-800 w-full">
+                        <button type="submit" class="bg-green-600 px-4 py-2 rounded-r-md hover:bg-green-700 transition">Assinar</button>
+                    </form>
+                </div>
+            </div>
+            
+            <div class="border-t border-gray-700 mt-8 pt-8 text-center text-gray-400">
+                <p>&copy; 2025 Pet Planet. Todos os direitos reservados.</p>
+            </div>
+        </div>
+    </footer>
 
-		}
+    <!-- Modal de Login -->
+    <div id="login-modal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 hidden">
+        <div class="bg-white rounded-lg shadow-xl w-full max-w-md p-6">
+            <div class="flex justify-between items-center mb-4">
+                <h3 class="text-xl font-semibold">Entre na Pet Planet</h3>
+                <button id="close-login-modal" class="text-gray-500 hover:text-gray-700">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            
+            <form id="login-form">
+                <div class="mb-4">
+                    <label class="block text-gray-700 mb-2" for="login-email">Email</label>
+                    <input type="email" id="login-email" class="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-green-600">
+                </div>
+                
+                <div class="mb-6">
+                    <label class="block text-gray-700 mb-2" for="login-password">Senha</label>
+                    <input type="password" id="login-password" class="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-green-600">
+                </div>
+                
+                <div class="flex items-center justify-between mb-6">
+                    <label class="flex items-center">
+                        <input type="checkbox" class="mr-2">
+                        <span class="text-sm">Lembrar de mim</span>
+                    </label>
+                    <a href="#" class="text-sm text-green-600 hover:underline">Esqueceu a senha?</a>
+                </div>
+                
+                <button type="submit" class="w-full bg-green-600 text-white py-2 rounded-md hover:bg-green-700 transition mb-4">Entrar</button>
+                
+                <div class="text-center">
+                    <p class="text-sm text-gray-600">Não tem conta? <button type="button" id="switch-to-register" class="text-green-600 hover:underline">Crie uma agora</button></p>
+                </div>
+            </form>
+            
+            <div class="mt-6 pt-4 border-t text-center">
+                <p class="text-sm text-gray-600 mb-2">Ou entre com</p>
+                <div class="flex justify-center space-x-4">
+                    <button class="bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700 transition"><i class="fab fa-facebook-f mr-2"></i>Facebook</button>
+                    <button class="bg-red-500 text-white px-4 py-2 rounded-md hover:bg-red-600 transition"><i class="fab fa-google mr-2"></i>Google</button>
+                </div>
+            </div>
+        </div>
+    </div>
 
-		function Acheseupet() {
-			window.location.href = "www.acheseupet.com.br"; 
-		}
+    <!-- Modal de Registro -->
+    <div id="register-modal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 hidden">
+        <div class="bg-white rounded-lg shadow-xl w-full max-w-md p-6">
+            <div class="flex justify-between items-center mb-4">
+                <h3 class="text-xl font-semibold">Crie sua Conta</h3>
+                <button id="close-register-modal" class="text-gray-500 hover:text-gray-700">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            
+            <form id="register-form">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+                    <div>
+                        <label class="block text-gray-700 mb-2" for="register-firstname">Nome</label>
+                        <input type="text" id="register-firstname" class="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-green-600">
+                    </div>
+                    
+                    <div>
+                        <label class="block text-gray-700 mb-2" for="register-lastname">Sobrenome</label>
+                        <input type="text" id="register-lastname" class="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-green-600">
+                    </div>
+                </div>
+                
+                <div class="mb-4">
+                    <label class="block text-gray-700 mb-2" for="register-email">Email</label>
+                    <input type="email" id="register-email" class="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-green-600">
+                </div>
+                
+                <div class="mb-4">
+                    <label class="block text-gray-700 mb-2" for="register-password">Senha</label>
+                    <input type="password" id="register-password" class="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-green-600">
+                    <p class="text-xs text-gray-500 mt-1">Mínimo de 8 caracteres</p>
+                </div>
+                
+                <div class="mb-6">
+                    <label class="block text-gray-700 mb-2" for="register-confirm-password">Confirmar Senha</label>
+                    <input type="password" id="register-confirm-password" class="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-green-600">
+                </div>
+                
+                <div class="mb-6">
+                    <label class="flex items-center">
+                        <input type="checkbox" class="mr-2">
+                        <span class="text-sm">Eu concordo com os <a href="#" class="text-green-600 hover:underline">Termos de Serviço</a> e <a href="#" class="text-green-600 hover:underline">Política de Privacidade</a></span>
+                    </label>
+                </div>
+                
+                <button type="submit" class="w-full bg-green-600 text-white py-2 rounded-md hover:bg-green-700 transition mb-4">Criar Conta</button>
+                
+                <div class="text-center">
+                    <p class="text-sm text-gray-600">Já tem uma conta? <button type="button" id="switch-to-login" class="text-green-600 hover:underline">Faça login</button></p>
+                </div>
+            </form>
+        </div>
+    </div>
 
-		function delayTime() {
-		loading = setTimeout(showPage, 5000);
-		}
+    <!-- Chat Flutuante -->
+    <div class="chat-float">
+        <button id="open-chat" class="bg-green-600 text-white w-16 h-16 rounded-full flex items-center justify-center shadow-lg hover:bg-green-700 transition">
+            <i class="fas fa-comment-dots text-2xl"></i>
+        </button>
+        
+        <div id="chat-box" class="hidden bg-white rounded-lg shadow-xl w-80 fixed bottom-24 right-4">
+            <div class="bg-green-600 text-white p-3 rounded-t-lg flex justify-between items-center">
+                <h3 class="font-semibold">Chat de Suporte</h3>
+                <button id="close-chat" class="text-white hover:text-green-200">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            
+            <div id="chat-messages" class="p-4 h-64 overflow-y-auto">
+                <div class="chat-message bg-gray-100 p-3 rounded-lg mb-3 ml-auto">
+                    <p class="text-sm">Olá! Como podemos ajudar?</p>
+                    <p class="text-xs text-gray-500 text-right mt-1">10:30 AM</p>
+                </div>
+            </div>
+            
+            <div class="p-3 border-t">
+                <div class="flex">
+                    <input type="text" id="chat-input" placeholder="Digite sua mensagem..." class="flex-grow px-3 py-2 border rounded-l-md focus:outline-none">
+                    <button id="send-chat" class="bg-green-600 text-white px-4 py-2 rounded-r-md hover:bg-green-700 transition">
+                        <i class="fas fa-paper-plane"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
 
-		function descubraMais() {
-			window.location.href = "https://www.petbr.com.br/";
-		}
+    <!-- JavaScript -->
+        <!-- JavaScript Libraries -->
+        <script src="https://unpkg.com/leaflet@1.9.3/dist/leaflet.js"></script>
+        
+        <!-- Main JavaScript -->
+    <script>
+        // Variáveis globais
+        let currentUser = null;
+        let cartItems = [];
+        let forumTopics = [];
+        let lostPets = [];
+        let products = [];
+        let gardenProducts = [];
+        let partnerShops = [];
+        
+        // Dados simulados
+        function initializeDemoData() {
+            // Animais perdidos/encontrados
+            lostPets = [
+                {
+                    id: 1,
+                    type: 'dog',
+                    status: 'lost',
+                    name: 'Max',
+                    breed: 'Golden Retriever',
+                    location: 'Centro, São Paulo',
+                    date: '2023-10-20',
+                    description: 'Cachorro grande, pelagem dourada, coleira azul. Muito dócil.',
+                    photo: 'https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/c6b7c9cf-f639-4e68-95f8-8252c739eed2.png'
+                },
+                {
+                    id: 2,
+                    type: 'cat',
+                    status: 'found',
+                    name: 'Desconhecido',
+                    breed: 'Gato Siamês',
+                    location: 'Bairro da Liberdade, São Paulo',
+                    date: '2023-10-22',
+                    description: 'Gato siamês, olhos azuis, encontrado perto da praça. Parece bem cuidado.',
+                    photo: 'https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/af17e4dc-e60e-4e59-9f91-704db3b9bc75.png'
+                },
+                {
+                    id: 3,
+                    type: 'bird',
+                    status: 'lost',
+                    name: 'Piu',
+                    breed: 'Calopsita',
+                    location: 'Jardins, São Paulo',
+                    date: '2023-10-21',
+                    description: 'Calopsita amarela com bochechas laranjas. Sabe assobiar a música da família Addams.',
+                    photo: 'https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/7334a91f-b0f3-4bd4-834c-253c5da146e5.png'
+                }
+            ];
 
-		let buttonm = document.getElementById("buttonM");
+            // Produtos da loja
+            products = [
+                {
+                    id: 1,
+                    name: 'Leopard 1A5BR',
+                    category: 'tanques',
+                    price: 3990464.00,
+                    image: 'leopard.jpg',
+                    description: 'Principal carro de combate (Viatura Blindada de Combate - Carro de Combate) do Exército Brasileiro',
+                    brand: 'Leopard'
+                },
+                {
+                    id: 2,
+                    name: 'Arranhador para Gatos com Brinquedo',
+                    category: 'cats',
+                    price: 85.50,
+                    image: 'https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/d3ca0848-7dd0-456a-ae38-0b1bd636b926.png',
+                    description: 'Arranhador resistente com bola interativa para gatos.',
+                    brand: 'Natureza'
+                },
+                {
+                    id: 3,
+                    name: 'Brinquedo Interativo para Pássaros',
+                    category: 'birds',
+                    price: 35.00,
+                    image: 'https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/8be0e4b4-8714-4b1f-98cc-15f8eb871f1f.png',
+                    description: 'Brinquedo colorido com sinos para estimular pássaros.',
+                    brand: 'Golden'
+                },
+                {
+                    id: 4,
+                    name: 'Cama Ortopédica para Cães Grandes',
+                    category: 'dogs',
+                    price: 250.00,
+                    image: 'https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/acca733a-fcda-48be-9336-b0e41a4b68de.png',
+                    description: 'Cama confortável e ortopédica para cães de grande porte.',
+                    brand: 'PremiumPet'
+                },
+                {
+                    id: 5,
+                    name: 'Areia Higiênica Super Absorvente',
+                    category: 'cats',
+                    price: 45.00,
+                    image: 'https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/1d47a8fe-0f43-45d8-9c05-6d6b3c4fac2e.png',
+                    description: 'Areia com alto poder de absorção e controle de odores.',
+                    brand: 'Natureza'
+                }
+            ];
 
-		buttonm.addEventListener('mousemove', (e) => {
-		    x = e.offsetX;
-		    y = e.offsetY;
-		    buttonm.style.setProperty('--mouse-x', x + "px");
-		    buttonm.style.setProperty('--mouse-y', y + "px");
-		});
+            // Produtos de jardinagem
+            gardenProducts = [
+                {
+                    id: 1,
+                    name: 'Kit de Sementes de Erva-do-Gato',
+                    price: 25.00,
+                    image: 'https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/0400f903-b7ab-4ee7-abb0-ffdcc782b943.png',
+                    description: 'Sementes orgânicas de erva-do-gato para seu felino se divertir.'
+                },
+                {
+                    id: 2,
+                    name: 'Fertilizante Orgânico Pet Friendly',
+                    price: 50.00,
+                    image: 'https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/7f5322a9-95f5-4ba1-bca1-2d1888552400.png',
+                    description: 'Fertilizante natural e seguro para jardins com animais de estimação.'
+                },
+                {
+                    id: 3,
+                    name: 'Vasos Biodegradáveis',
+                    price: 15.00,
+                    image: 'https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/8da18894-bd7d-4cf1-bb8d-86eb12935eec.png',
+                    description: 'Conjunto de vasos biodegradáveis para o plantio de mudas.'
+                },
+                {
+                    id: 4,
+                    name: 'Repelente Natural de Pragas',
+                    price: 30.00,
+                    image: 'https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/ea652c14-eb28-48df-a82f-861db97f2016.png',
+                    description: 'Repelente à base de óleos essenciais, seguro para pets e plantas.'
+                }
+            ];
 
-	</script>
+            // Parceiros
+            partnerShops = [
+                {
+                    id: 1,
+                    name: 'Pet Feliz',
+                    address: 'Rua das Flores, 123 - Centro, São Paulo',
+                    phone: '(11) 1234-5678',
+                    services: ['Banho e Tosa', 'Venda de Produtos'],
+                    lat: -23.550520,
+                    lng: -46.633308
+                },
+                {
+                    id: 2,
+                    name: 'Amigo Pet',
+                    address: 'Av. Paulista, 1000 - Bela Vista, São Paulo',
+                    phone: '(11) 9876-5432',
+                    services: ['Consulta Veterinária', 'Venda de Produtos', 'Hotel para Pets'],
+                    lat: -23.561355,
+                    lng: -46.656050
+                },
+                {
+                    id: 3,
+                    name: 'Reino Animal',
+                    address: 'Rua Augusta, 500 - Consolação, São Paulo',
+                    phone: '(11) 2345-6789',
+                    services: ['Banho e Tosa', 'Adestramento'],
+                    lat: -23.554880,
+                    lng: -46.660000
+                }
+            ];
 
+            // Tópicos do fórum
+            forumTopics = [
+                {
+                    id: 1,
+                    title: 'Dúvidas sobre a primeira vacina do filhote',
+                    category: 'Saúde',
+                    author: 'Maria Silva',
+                    date: '2023-10-25',
+                    content: 'Meu filhote de 2 meses vai tomar a primeira vacina. Quais cuidados devo ter antes e depois?',
+                    replies: [
+                        { author: 'João Souza', date: '2023-10-25', content: 'É importante que ele esteja saudável e vermifugado. Evite passeios por alguns dias após a vacina.' },
+                        { author: 'Ana Paula', date: '2023-10-26', content: 'Observe se há reações como febre ou inchaço no local da aplicação. Se ocorrer, procure o veterinário.' }
+                    ]
+                },
+                {
+                    id: 2,
+                    title: 'Melhores brinquedos para gatos que ficam sozinhos',
+                    category: 'Geral',
+                    author: 'Carlos Mendes',
+                    date: '2023-10-24',
+                    content: 'Trabalho fora o dia todo e meu gato fica sozinho. Quais brinquedos recomendam para ele não ficar entediado?',
+                    replies: [
+                        { author: 'Fernanda Lima', date: '2023-10-24', content: 'Brinquedos interativos com dispenser de ração são ótimos! E arranhadores altos para ele escalar.' }
+                    ]
+                }
+            ];
+        }
+
+        // Funções de controle de modais
+        const adoptionModal = document.getElementById('adoption-modal');
+        
+        function showAdoptionModal(petName) {
+            document.getElementById('adoption-pet-name').value = petName;
+            adoptionModal.classList.remove('hidden');
+        }
+
+        function hideAdoptionModal() {
+            adoptionModal.classList.add('hidden');
+        }
+        const loginModal = document.getElementById('login-modal');
+        const registerModal = document.getElementById('register-modal');
+        const newTopicModal = document.getElementById('new-topic-modal');
+
+        function showLoginModal() {
+            loginModal.classList.remove('hidden');
+        }
+
+        function hideLoginModal() {
+            loginModal.classList.add('hidden');
+        }
+
+        function showRegisterModal() {
+            registerModal.classList.remove('hidden');
+        }
+
+        function hideRegisterModal() {
+            registerModal.classList.add('hidden');
+        }
+
+        function showNewTopicModal() {
+            newTopicModal.classList.remove('hidden');
+        }
+
+        function hideNewTopicModal() {
+            newTopicModal.classList.add('hidden');
+        }
+
+        // Event Listeners para modais
+        document.getElementById('close-login-modal').addEventListener('click', hideLoginModal);
+        document.getElementById('close-register-modal').addEventListener('click', hideRegisterModal);
+        document.getElementById('close-topic-modal').addEventListener('click', hideNewTopicModal);
+        document.getElementById('cancel-topic').addEventListener('click', hideNewTopicModal);
+
+        document.getElementById('switch-to-register').addEventListener('click', () => {
+            hideLoginModal();
+            showRegisterModal();
+        });
+
+        document.getElementById('switch-to-login').addEventListener('click', () => {
+            hideRegisterModal();
+            showLoginModal();
+        });
+
+        // Simulação de Login/Logout
+        function login(email, password) {
+            // Simulação de autenticação
+            if (email === 'teste@petplanet.com' && password === '12345678') {
+                currentUser = { name: 'Usuário Teste', avatar: 'https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/c3e03b73-bcd1-42a6-94de-3fcd08c78a96.png' };
+                updateUserArea();
+                hideLoginModal();
+                alert('Login realizado com sucesso!');
+            } else {
+                alert('Email ou senha incorretos.');
+            }
+        }
+
+        function logout() {
+            currentUser = null;
+            updateUserArea();
+            alert('Logout realizado com sucesso!');
+        }
+
+        function updateUserArea() {
+            const loginArea = document.getElementById('login-area');
+            const userArea = document.getElementById('user-area');
+            const userAvatar = document.getElementById('user-avatar');
+
+            if (currentUser) {
+                loginArea.classList.add('hidden');
+                userArea.classList.remove('hidden');
+                userAvatar.src = currentUser.avatar;
+            } else {
+                loginArea.classList.remove('hidden');
+                userArea.classList.add('hidden');
+            }
+        }
+
+        document.getElementById('login-form').addEventListener('submit', (e) => {
+            e.preventDefault();
+            const email = document.getElementById('login-email').value;
+            const password = document.getElementById('login-password').value;
+            login(email, password);
+        });
+
+        document.getElementById('register-form').addEventListener('submit', (e) => {
+            e.preventDefault();
+            // Lógica de registro (apenas simulação)
+            alert('Conta criada com sucesso! Faça login para continuar.');
+            hideRegisterModal();
+            showLoginModal();
+        });
+
+        // Navegação por abas
+        const navLinks = document.querySelectorAll('.navbar a');
+        const tabContents = document.querySelectorAll('.tab-content');
+
+        function showTab(tabId) {
+            tabContents.forEach(content => {
+                content.classList.remove('active');
+            });
+            document.getElementById(tabId + '-content').classList.add('active');
+
+            navLinks.forEach(link => {
+                link.classList.remove('active-tab', 'text-green-700');
+                link.classList.add('text-gray-700');
+            });
+            const activeLink = document.querySelector(`.navbar a[href="#${tabId}"]`);
+            if (activeLink) {
+                activeLink.classList.add('active-tab', 'text-green-700');
+                activeLink.classList.remove('text-gray-700');
+            }
+            // Close mobile menu if open
+            document.getElementById('mobile-menu').classList.add('hidden');
+        }
+
+        // Initialize tab based on URL hash or default to home
+        window.addEventListener('DOMContentLoaded', () => {
+            initializeDemoData(); // Load simulated data
+            const initialHash = window.location.hash.substring(1);
+            if (initialHash && document.getElementById(initialHash + '-content')) {
+                showTab(initialHash);
+            } else {
+                showTab('home'); // Default to home tab
+            }
+            updateUserArea(); // Update login/user area on load
+            renderLostPets(); // Render initial lost pets
+            renderShopProducts(); // Render initial shop products
+            renderGardenProducts(); // Render initial garden products
+            renderPartnerShops(); // Render initial partner shops
+            renderForumTopics(); // Render initial forum topics
+        });
+
+        navLinks.forEach(link => {
+            link.addEventListener('click', (e) => {
+                e.preventDefault();
+                const tabId = link.getAttribute('href').substring(1);
+                showTab(tabId);
+                history.pushState(null, '', `#${tabId}`); // Update URL hash
+            });
+        });
+
+        // Mobile menu toggle
+        document.getElementById('mobile-menu-button').addEventListener('click', () => {
+            document.getElementById('mobile-menu').classList.toggle('hidden');
+        });
+
+        // Seção Animais Perdidos/Encontrados
+        const lostPetsList = document.getElementById('lost-pets-list');
+        const lostPetForm = document.getElementById('lost-pet-form');
+
+        function renderLostPets() {
+            lostPetsList.innerHTML = ''; // Clear current list
+            lostPets.forEach(pet => {
+                const petCard = `
+                    <div class="bg-white rounded-lg shadow-md p-4 flex flex-col md:flex-row items-center">
+                        <img src="${pet.photo}" alt="${pet.name}" class="w-full md:w-32 h-32 object-cover rounded-lg mb-4 md:mb-0 md:mr-4">
+                        <div class="flex-grow">
+                            <h4 class="text-lg font-semibold">${pet.name} (${pet.type === 'dog' ? 'Cachorro' : pet.type === 'cat' ? 'Gato' : pet.type === 'bird' ? 'Pássaro' : 'Outro'})</h4>
+                            <p class="text-gray-600 text-sm mb-1">Status: <span class="${pet.status === 'lost' ? 'text-red-500' : 'text-green-500'} font-medium">${pet.status === 'lost' ? 'Perdido' : 'Encontrado'}</span></p>
+                            <p class="text-gray-600 text-sm mb-1">Raça/Aparência: ${pet.breed}</p>
+                            <p class="text-gray-600 text-sm mb-1">Local: ${pet.location}</p>
+                            <p class="text-gray-600 text-sm mb-2">Data: ${pet.date}</p>
+                            <p class="text-gray-700 text-sm">${pet.description}</p>
+                            <button class="mt-3 bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600 transition">Entrar em Contato</button>
+                        </div>
+                    </div>
+                `;
+                lostPetsList.innerHTML += petCard;
+            });
+        }
+
+        lostPetForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            const newPet = {
+                id: lostPets.length + 1,
+                type: document.getElementById('pet-type').value,
+                status: document.getElementById('pet-status').value,
+                name: document.getElementById('pet-name').value || 'Desconhecido',
+                breed: document.getElementById('pet-breed').value,
+                location: document.getElementById('pet-location').value,
+                date: document.getElementById('pet-date').value,
+                description: document.getElementById('pet-description').value,
+                photo: 'https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/4db6bcee-5417-4db6-9be3-cdf0dfff0b01.png' // Placeholder for uploaded photo
+            };
+            lostPets.unshift(newPet); // Add to the beginning of the array
+            renderLostPets();
+            lostPetForm.reset();
+            alert('Postagem enviada com sucesso!');
+        });
+
+        // Seção Loja Virtual
+        const shopProductsContainer = document.getElementById('shop-products');
+        const cartCount = document.getElementById('cart-count');
+        const cartItemsContainer = document.getElementById('cart-items');
+        const cartSummary = document.getElementById('cart-summary');
+        const cartSubtotal = document.getElementById('cart-subtotal');
+        const cartShipping = document.getElementById('cart-shipping');
+        const cartTotal = document.getElementById('cart-total');
+
+        function renderShopProducts() {
+            shopProductsContainer.innerHTML = '';
+            products.forEach(product => {
+                const productCard = `
+                    <div class="bg-white rounded-lg overflow-hidden shadow-md product-card">
+                        <img src="${product.image}" alt="${product.name}" class="w-full h-48 object-cover">
+                        <div class="p-4">
+                            <h3 class="font-semibold text-lg mb-1">${product.name}</h3>
+                            <p class="text-gray-600 text-sm mb-2">${product.description}</p>
+                            <p class="text-green-600 font-bold text-xl mb-3">R$ ${product.price.toFixed(2)}</p>
+                            <button class="w-full bg-green-600 text-white py-2 rounded hover:bg-green-700 transition add-to-cart-btn" data-product-id="${product.id}">Adicionar ao Carrinho</button>
+                        </div>
+                    </div>
+                `;
+                shopProductsContainer.innerHTML += productCard;
+            });
+
+            document.querySelectorAll('.add-to-cart-btn').forEach(button => {
+                button.addEventListener('click', (e) => {
+                    const productId = parseInt(e.target.dataset.productId);
+                    addToCart(productId);
+                });
+            });
+        }
+
+        function addToCart(productId) {
+            const product = products.find(p => p.id === productId);
+            if (product) {
+                const existingItem = cartItems.find(item => item.id === productId);
+                if (existingItem) {
+                    existingItem.quantity++;
+                } else {
+                    cartItems.push({ ...product, quantity: 1 });
+                }
+                updateCartDisplay();
+            }
+        }
+
+        function updateCartDisplay() {
+            cartCount.textContent = cartItems.reduce((sum, item) => sum + item.quantity, 0);
+            cartItemsContainer.innerHTML = '';
+            let subtotal = 0;
+
+            if (cartItems.length === 0) {
+                cartItemsContainer.innerHTML = '<p class="text-center text-gray-500 py-8">Seu carrinho está vazio</p>';
+                cartSummary.classList.add('hidden');
+            } else {
+                cartItems.forEach(item => {
+                    subtotal += item.price * item.quantity;
+                    const cartItemHtml = `
+                        <div class="flex justify-between items-center border-b border-gray-200 py-2">
+                            <div class="flex items-center">
+                                <img src="${item.image}" alt="${item.name}" class="w-16 h-16 object-cover rounded mr-4">
+                                <div>
+                                    <p class="font-semibold">${item.name}</p>
+                                    <p class="text-gray-600 text-sm">R$ ${item.price.toFixed(2)} x ${item.quantity}</p>
+                                </div>
+                            </div>
+                            <button class="text-red-500 hover:text-red-700 remove-from-cart-btn" data-product-id="${item.id}">
+                                <i class="fas fa-trash"></i>
+                            </button>
+                        </div>
+                    `;
+                    cartItemsContainer.innerHTML += cartItemHtml;
+                });
+                cartSummary.classList.remove('hidden');
+            }
+
+            const shippingCost = subtotal > 0 ? 15.00 : 0; // Example shipping cost
+            const total = subtotal + shippingCost;
+
+            cartSubtotal.textContent = `R$ ${subtotal.toFixed(2)}`;
+            cartShipping.textContent = `R$ ${shippingCost.toFixed(2)}`;
+            cartTotal.textContent = `R$ ${total.toFixed(2)}`;
+
+            document.querySelectorAll('.remove-from-cart-btn').forEach(button => {
+                button.addEventListener('click', (e) => {
+                    const productId = parseInt(e.target.dataset.productId);
+                    removeFromCart(productId);
+                });
+            });
+        }
+
+        function removeFromCart(productId) {
+            cartItems = cartItems.filter(item => item.id !== productId);
+            updateCartDisplay();
+        }
+
+        document.getElementById('checkout-btn').addEventListener('click', () => {
+            if (cartItems.length > 0) {
+                alert('Compra finalizada! Total: ' + cartTotal.textContent);
+                cartItems = []; // Clear cart
+                updateCartDisplay();
+            } else {
+                alert('Seu carrinho está vazio.');
+            }
+        });
+
+        // Seção Jardinagem
+        const gardenProductsContainer = document.getElementById('garden-products');
+
+        function renderGardenProducts() {
+            gardenProductsContainer.innerHTML = '';
+            gardenProducts.forEach(product => {
+                const productCard = `
+                    <div class="bg-white rounded-lg overflow-hidden shadow-md product-card">
+                        <img src="${product.image}" alt="${product.name}" class="w-full h-48 object-cover">
+                        <div class="p-4">
+                            <h3 class="font-semibold text-lg mb-1">${product.name}</h3>
+                            <p class="text-gray-600 text-sm mb-2">${product.description}</p>
+                            <p class="text-green-600 font-bold text-xl">R$ ${product.price.toFixed(2)}</p>
+                            <button class="w-full bg-green-600 text-white py-2 rounded hover:bg-green-700 transition mt-3">Comprar</button>
+                        </div>
+                    </div>
+                `;
+                gardenProductsContainer.innerHTML += productCard;
+            });
+        }
+
+        // Seção Parceiros
+        const partnerShopsContainer = document.getElementById('partner-shops');
+        const mapElement = document.getElementById('map');
+        let map;
+        let markers = [];
+
+        function initMap() {
+            // Check if map is already initialized
+            if (map) {
+                map.remove(); // Remove existing map instance
+            }
+
+            map = L.map('map').setView([-23.550520, -46.633308], 12); // Default to São Paulo
+
+            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+            }).addTo(map);
+        }
+
+        function renderPartnerShops() {
+            partnerShopsContainer.innerHTML = '';
+            markers.forEach(marker => map.removeLayer(marker)); // Clear existing markers
+            markers = [];
+
+            partnerShops.forEach(shop => {
+                const shopCard = `
+                    <div class="bg-white rounded-lg shadow-md p-4">
+                        <h4 class="font-semibold text-lg mb-2">${shop.name}</h4>
+                        <p class="text-gray-600 text-sm mb-1"><i class="fas fa-map-marker-alt mr-2"></i>${shop.address}</p>
+                        <p class="text-gray-600 text-sm mb-2"><i class="fas fa-phone mr-2"></i>${shop.phone}</p>
+                        <p class="text-gray-700 text-sm">Serviços: ${shop.services.join(', ')}</p>
+                        <button class="mt-3 bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600 transition">Ver no Mapa</button>
+                    </div>
+                `;
+                partnerShopsContainer.innerHTML += shopCard;
+
+                const marker = L.marker([shop.lat, shop.lng]).addTo(map)
+                    .bindPopup(`<b>${shop.name}</b><br>${shop.address}<br>${shop.phone}`);
+                markers.push(marker);
+            });
+        }
+
+        // Initialize map when the partners tab is shown
+        document.querySelector('.navbar a[href="#partners"]').addEventListener('click', () => {
+            setTimeout(initMap, 100); // Give time for the map container to be visible
+        });
+
+        // Seção Fórum
+        const forumTopicsContainer = document.getElementById('forum-topics');
+        const newTopicBtn = document.getElementById('new-topic-btn');
+        const newTopicForm = document.getElementById('new-topic-form');
+        const topicView = document.getElementById('topic-view');
+        const backToForumBtn = document.getElementById('back-to-forum');
+        const replyForm = document.getElementById('reply-form');
+
+        function renderForumTopics() {
+            forumTopicsContainer.innerHTML = '';
+            forumTopics.forEach(topic => {
+                const topicCard = `
+                    <div class="bg-white rounded-lg shadow-md p-4 mb-4 cursor-pointer forum-topic-card" data-topic-id="${topic.id}">
+                        <h3 class="font-semibold text-lg mb-1">${topic.title}</h3>
+                        <div class="flex items-center text-sm text-gray-500 mb-2">
+                            <span class="mr-4">Por: ${topic.author}</span>
+                            <span class="mr-4">Data: ${topic.date}</span>
+                            <span class="bg-gray-100 px-2 py-1 rounded">${topic.category}</span>
+                        </div>
+                        <p class="text-gray-700 text-sm line-clamp-2">${topic.content}</p>
+                        <p class="text-blue-600 text-sm mt-2">Respostas: ${topic.replies.length}</p>
+                    </div>
+                `;
+                forumTopicsContainer.innerHTML += topicCard;
+            });
+
+            document.querySelectorAll('.forum-topic-card').forEach(card => {
+                card.addEventListener('click', (e) => {
+                    const topicId = parseInt(e.currentTarget.dataset.topicId);
+                    viewTopic(topicId);
+                });
+            });
+        }
+
+        newTopicBtn.addEventListener('click', showNewTopicModal);
+
+        newTopicForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            const newTopic = {
+                id: forumTopics.length + 1,
+                title: document.getElementById('topic-title').value,
+                category: document.getElementById('topic-category').value,
+                author: currentUser ? currentUser.name : 'Anônimo', // Use current user or 'Anonymous'
+                date: new Date().toISOString().slice(0, 10),
+                content: document.getElementById('topic-content').value,
+                replies: []
+            };
+            forumTopics.unshift(newTopic); // Add to the beginning
+            renderForumTopics();
+            hideNewTopicModal();
+            newTopicForm.reset();
+            alert('Tópico criado com sucesso!');
+        });
+
+        function viewTopic(topicId) {
+            const topic = forumTopics.find(t => t.id === topicId);
+            if (topic) {
+                document.getElementById('forum-content').classList.remove('active');
+                topicView.classList.remove('hidden');
+                document.getElementById('view-topic-title').textContent = topic.title;
+                document.getElementById('view-topic-author').textContent = `Por: ${topic.author}`;
+                document.getElementById('view-topic-date').textContent = `Data: ${topic.date}`;
+                document.getElementById('view-topic-category').textContent = topic.category;
+                document.getElementById('view-topic-content').textContent = topic.content;
+
+                const topicRepliesContainer = document.getElementById('topic-replies');
+                topicRepliesContainer.innerHTML = '';
+                topic.replies.forEach(reply => {
+                    const replyHtml = `
+                        <div class="bg-gray-100 p-3 rounded-lg mb-3">
+                            <p class="font-semibold text-sm">${reply.author} <span class="text-gray-500 text-xs ml-2">${reply.date}</span></p>
+                            <p class="text-gray-700">${reply.content}</p>
+                        </div>
+                    `;
+                    topicRepliesContainer.innerHTML += replyHtml;
+                });
+
+                replyForm.dataset.topicId = topicId; // Store current topic ID for reply form
+            }
+        }
+
+        backToForumBtn.addEventListener('click', () => {
+            topicView.classList.add('hidden');
+            document.getElementById('forum-content').classList.add('active');
+        });
+
+        replyForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            const topicId = parseInt(replyForm.dataset.topicId);
+            const replyContent = document.getElementById('reply-content').value;
+            const topic = forumTopics.find(t => t.id === topicId);
+
+            if (topic && replyContent.trim() !== '') {
+                const newReply = {
+                    author: currentUser ? currentUser.name : 'Anônimo',
+                    date: new Date().toISOString().slice(0, 10),
+                    content: replyContent
+                };
+                topic.replies.push(newReply);
+                viewTopic(topicId); // Re-render topic to show new reply
+                replyForm.reset();
+            }
+        });
+
+        // Chat Flutuante
+        const openChatBtn = document.getElementById('open-chat');
+        const closeChatBtn = document.getElementById('close-chat');
+        const chatBox = document.getElementById('chat-box');
+        const chatMessages = document.getElementById('chat-messages');
+        const chatInput = document.getElementById('chat-input');
+        const sendChatBtn = document.getElementById('send-chat');
+
+        openChatBtn.addEventListener('click', () => {
+            chatBox.classList.remove('hidden');
+        });
+
+        closeChatBtn.addEventListener('click', () => {
+            chatBox.classList.add('hidden');
+        });
+
+        sendChatBtn.addEventListener('click', () => {
+            sendMessage();
+        });
+
+        chatInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') {
+                sendMessage();
+            }
+        });
+
+        function sendMessage() {
+            const messageText = chatInput.value.trim();
+            if (messageText !== '') {
+                const messageHtml = `
+                    <div class="chat-message bg-green-100 p-3 rounded-lg mb-3 mr-auto">
+                        <p class="text-sm">${messageText}</p>
+                        <p class="text-xs text-gray-500 text-left mt-1">${new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</p>
+                    </div>
+                `;
+                chatMessages.innerHTML += messageHtml;
+                chatInput.value = '';
+                chatMessages.scrollTop = chatMessages.scrollHeight; // Scroll to bottom
+
+                // Simulate a reply after a short delay
+                setTimeout(() => {
+                    const replyHtml = `
+                        <div class="chat-message bg-gray-100 p-3 rounded-lg mb-3 ml-auto">
+                            <p class="text-sm">Obrigado pela sua mensagem! Um de nossos atendentes já irá te ajudar.</p>
+                            <p class="text-xs text-gray-500 text-right mt-1">${new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</p>
+                        </div>
+                    `;
+                    chatMessages.innerHTML += replyHtml;
+                    chatMessages.scrollTop = chatMessages.scrollHeight;
+                }, 1500);
+            }
+        }
+    </script>
+</body>
 </html>
-
-
-
-
-
-
-
-
-
-

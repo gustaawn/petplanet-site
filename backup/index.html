@@ -1,0 +1,487 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<title>Pet Planet</title>
+		<style>
+			html {
+				max-height: 100%;
+				max-width: 100%;
+			}
+			body {
+				width: 100%;
+				background-color: #ffffff;
+				font-family: Arial, Helvetica, sans-serif;
+			}
+            #loader {
+			  position: absolute;
+			  left: 50%;
+			  top: 50%;
+			  z-index: 1;
+			  width: 120px;
+			  height: 120px;
+			  margin: -76px 0 0 -76px;
+			  border: 16px solid #c7e9d4;
+			  border-radius: 50%;
+			  border-top: 16px solid #008632;
+			  -webkit-animation: spin 4s linear infinite;
+			  animation: spin 4s linear infinite;
+			}
+			.botao {
+				position: relative;
+				color: #108632;
+				font-size: 20px;
+				top: 60px;
+				left: 85px;
+				background-color: transparent;
+				border: none;
+				cursor: pointer;
+      			transition: transform 0.3s ease;
+			}
+			.cachorroO:hover {
+				transform: scale(-20px, -20px), translateY(-20px);
+			}
+			.menu-superior {
+			  	display: flex;
+			  	justify-content: center;
+			  	align-items: center;
+			  	gap: 10px;
+			  	background-color: #fdfdfd;
+			  	padding: 10px 0;
+			  	position: absolute;
+			  	top: 110px;
+			  	left: 0;
+			  	width: 100%;
+			  	z-index: 10;
+			}
+
+			.menu-superior ul {
+			  	list-style: none;
+			  	display: flex;
+			  	gap: 25px;
+			  	margin: 0;
+			  	padding: 0;
+			}
+
+			.menu-superior li {
+			  	transition: transform 0.3s ease, box-shadow 0.3s ease;
+			  	border-radius: 10px;
+			}
+
+			.menu-superior li:hover {
+			  	transform: scale(1.1);
+			  	box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+			}
+
+			.menu-superior a {
+			  	text-decoration: none;
+			  	font-weight: bold;
+			  	color: white;
+			  	padding: 10px 20px;
+			  	display: block;
+			  	border-radius: 10px;
+			  	transition: background-color 0.3s ease, color 0.3s ease;
+			}
+
+			.cachorro a { background-color: #ffb347; } /* Laranja suave */
+			.cachorro a:hover { background-color: #ffa31a; }
+
+			.gato a { background-color: #a8a7ff; } /* Roxo claro */
+			.gato a:hover { background-color: #8f8eff; }
+
+			.aves a { background-color: #ffd966; } /* Amarelo suave */
+			.aves a:hover { background-color: #ffcf33; }
+
+			.peixes a { background-color: #5bc0de; } /* Azul piscina */
+			.peixes a:hover { background-color: #31b0d5; }
+
+			.exoticos a { background-color: #d87093; } /* Rosa médio */
+			.exoticos a:hover { background-color: #c94c73; }
+
+			.casaejardim a { background-color: #9acd32; } /* Verde vibrante */
+			.casaejardim a:hover { background-color: #7cb518; }
+
+			.icone-menu {
+			  	width: 28px;
+			  	height: 28px;
+			  	vertical-align: middle;
+			 	margin-right: 8px;
+			 	filter: brightness(0) invert(1);
+			  	transition: transform 0.3s ease;
+			}
+
+			.menu-superior li:hover .icone-menu {
+			  	transform: rotate(10deg) scale(1.15);
+			}
+			
+			/*.botao:hover {
+				transform: rotate(90deg);
+			}*/
+			/*.divListaSup {
+				text-align: center;
+			}
+			#listaSup {
+				display: inline-block;
+				list-style-type: none;
+				margin: 0;
+				padding: 0;
+				overflow: hidden;
+			}
+			#conteudoLista {
+				display: inline;
+				float: left;
+			}
+			#conteudoLista a {
+				display: block;
+				padding: 70px;
+				background-color: transparent;
+				text-decoration: none;
+			}*/
+			#buttonlogin{
+				position: fixed;
+				top: 0;
+				right: 5px;
+				border-style: none;
+				background-color: white;
+				font-size: 17px;
+				font-weight: bold;
+			}
+
+			#imglogin {
+				position: fixed;
+				top: 1px;
+				right: 54px;
+				width: 20px;
+				height: 20px;
+			}
+
+			#linklogin{
+				text-decoration: none;
+				color: black;
+			}
+			
+			.grid-container {
+			  	display: grid;
+			  	height: 20vh;
+			  	grid-template-columns: max-content max-content max-content max-content max-content;
+			  	place-content: center;
+			  	align-content: start;
+				justify-content: center;
+				position: absolute;
+				left: 150px;
+			}
+			.search-box {
+				position: absolute;
+				top: 40px;
+				right: 20px;
+				/*transform: translate(-50%, -50%);*/
+				background: #e2e2e2;
+				height: 40px;
+				padding: 10px;
+				border-radius: 40px;
+				display: flex;
+				justify-content: space-between;
+				align-items: center;
+			}
+			.search-txt {
+				border: none;
+				background: none;
+				outline: none;
+				padding: 0;
+				color: #f0f5fb;
+				font-size: 16px;
+				line-height: 40px;
+			}
+			#titulo1 {
+				color: #008632; 
+			}
+			.overlay {
+			    position: fixed;
+			    top: 0;
+			    left: 0;
+			    width: 100%;
+			    height: 100%;
+			    background: rgba(0,0,0,0.5);
+			    opacity: 0;
+			    visibility: hidden;
+			    transition: opacity 0.3s ease;
+			    z-index: 999;
+			}
+			.overlay.visivel {
+			    opacity: 1;
+			    visibility: visible;
+			}
+		    .menu-lateral {
+			    width: 250px;
+			    height: 100vh;
+			    background: #fff;
+				position: fixed;
+			    top: 0;
+			    left: -300px;
+			    transition: left 0.3s ease;
+			    z-index: 1000;
+			    box-shadow: 2px 0 10px rgba(0,0,0,0.2);
+			    display: flex;
+			    flex-direction: column;
+			    padding: 20px;
+			}
+			
+		    .menu-lateral.aberto {
+			    left: 0;
+			}
+			
+			.menu-lateral ul {
+			    list-style: none;
+			    padding: 0;
+			    margin: 0;
+			}
+			
+			.menu-lateral ul li {
+			    margin: 15px 0;
+			}
+			
+			.menu-lateral ul li a {
+			    text-decoration: none;
+			    color: #333;
+			    font-size: 16px;
+			    font-weight: bold;
+			    display: block;
+			    transition: color 0.2s ease;
+			}
+			
+			.menu-lateral ul li a:hover {
+			    color: #007BFF;
+			}
+			.fechar-menu-lat a:hover {
+				color: #ff0000;
+			}
+			.descubraMais {
+				color: #fff;
+				text-align: center;
+				position: absolute;
+				left: 10%;
+				top: 250%;
+				border-radius: 40px;
+				background: #3464c4;
+				padding: 20px; 
+				width: 200px;
+				height: 20px;
+				position: flex;
+				bottom: -20%;
+				-webkit-transform: translateY(-20%);
+				-ms-transform: translateY(-20%);
+				transform: translateY(-20%);
+				-webkit-transform: translateX(170%);
+				-ms-transform: translateX(170%);
+				transform: translateX(170%);
+			}
+
+			@-webkit-keyframes spin {
+			  0% { -webkit-transform: rotate(0deg); }
+			  100% { -webkit-transform: rotate(1080deg); }
+			}
+
+			@keyframes spin {
+			  0% { transform: rotate(0deg); }
+			  100% { transform: rotate(1080deg); }
+			}
+
+            .animate-bottom {
+			  position: relative;
+			  -webkit-animation-name: animatebottom;
+			  -webkit-animation-duration: 1s;
+			  animation-name: animatebottom;
+			  animation-duration: 1s
+			}
+
+			@-webkit-keyframes animatebottom {
+			  from { bottom:-100px; opacity:0 } 
+			  to { bottom:0px; opacity:1 }
+			}
+
+			@keyframes animatebottom { 
+			  from{ bottom:-100px; opacity:0 } 
+			  to{ bottom:0; opacity:1 }
+			}
+		</style>
+	</head>
+	<body onload="delayTime()" style="margin:0;">
+        <!--<div id="loader"></div>-->
+        <div id="content" class="animate-bottom">
+			<div class="overlay" id="overlay"></div>
+			<div class="search-box">
+				<search>
+				<input type="text" class="search-txt" placeholder="Pesquisar">
+				<a href="#" class="search-btn">
+					<img src="loupe.png" alt="Lupa" height="20" width="20">
+				</a>
+				</search>
+ 			</div>
+			<button class="botao" onclick="Menu()"><b>&#9776</b></button>
+			<img style="display: block; position: absolute; top: 50px; left: 30px; border: 0; margin: auto;" src="logo_pet2.png" width="50" height="50">
+            <h1 id="titulo1" style="position: relative; text-align: left; left: 120px;"><b>Pet Planet</b></h1>
+			
+            <nav class="menu-lateral" id="menuLateral">
+			  	<ul>
+			    	<li><a href="login.html" target="_blank">Login</a></li>
+			    	<li><a href="#">Link 2</a></li>
+			    	<li><a href="#">Link 3</a></li>
+					<li><a id="fechar-menu-lat" onclick="fecharMenu()" onmouseover="style='color:#ff0000;'" onmouseout="style='color: #333;'">Fechar</a></li>
+			  	</ul>
+			</nav>
+			<nav class="menu-superior">
+				<ul>
+				    <li class="aba cachorro">
+				    	<a href="https://munhozlimagustavo.wixsite.com/loja-pet-planet" target="_blank">
+				    	<img src="./imagens/dog.png" alt="Cachorros" class="icone-menu">
+				    	Cachorros
+				      </a>
+				    </li>
+				    <li class="aba gato">
+				      	<a href="https://www.zeenow.com.br/gatos/" target="_blank">
+				        <img src="./imagens/cat.png" alt="Gatos" class="icone-menu">
+				        Gatos
+				      </a>
+				    </li>
+				    <li class="aba aves">
+				      	<a href="https://raposonutricao.com.br/?gad_source=1&gad_campaignid=20765277241" target="_blank">
+				        <img src="./imagens/bird.png" alt="Aves" class="icone-menu">
+				        Aves
+				      </a>
+				    </li>
+				    <li class="aba peixes">
+				      	<a href="https://poytara.com/?gad_source=1&gad_campaignid=19022444615" target="_blank">
+				        <img src="./imagens/fish.png" alt="Peixes" class="icone-menu">
+				        Peixes
+				      </a>
+				    </li>
+				    <li class="aba exoticos">
+				      	<a href="https://www.ezootique.com.br/racoes-e-petiscos" target="_blank">
+				        <img src="./imagens/exotic.png" alt="Exóticos" class="icone-menu">
+				        Exóticos
+				      </a>
+				    </li>
+				    <li class="aba casaejardim">
+				      	<a href="https://www.vidapaisagismo.com.br/" target="_blank">
+				        <img src="./imagens/handg.png" alt="Casa e Jardim" class="icone-menu">
+				        Casa & Jardim
+				      </a>
+				    </li>
+				</ul>
+			</nav>
+			<br>
+			<div class="grid-container">
+				<svg width="250" height="332" xmlns="http://www.w3.org/2000/svg">
+					<rect width="200" height="280" x="50" y="50" rx="20" ry="20" fill="#f9f9f9"/>
+					<foreignobject x="20" y="75" width="250" height="332">
+						<body xmlns="http://www.w3.org/1999/xhtml">
+							<div><a href="https://maps.google.com/"><img id="cachorroO" style="display: block; margin: auto; align-items: center;" src="cachorro.png" alt="cachorro" width="150" height="150">
+							<p style="text-align: center; font-weight: bold; font-size: 20px;"></a>Ache seu pet</p></div>
+						</body>
+					</foreignobject>
+				</svg>
+				<svg width="250" height="332" xmlns="http://www.w3.org/2000/svg">
+					<rect width="200" height="280" x="50" y="50" rx="20" ry="20" fill="#f9f9f9"/>
+					<foreignobject x="20" y="75" width="250" height="332">
+						<body xmlns="http://www.w3.org/1999/xhtml">
+							<div><a href="https://unimed.com.br/"><img style="display: block; margin: auto; align-items: center;" src="medico.png" alt="medico" width="150" height="150">
+							<p style="text-align: center; font-weight: bold; font-size: 20px;"></a>Assistência médica</p></div>
+						</body>
+					</foreignobject>
+				</svg>
+				<svg width="250" height="332" xmlns="http://www.w3.org/2000/svg">
+					<rect width="200" height="280" x="50" y="50" rx="20" ry="20" fill="#f9f9f9"/>
+					<foreignobject x="20" y="75" width="250" height="332">
+						<body xmlns="http://www.w3.org/1999/xhtml">
+							<div><a href="https://petz.com.br/"><img style="display: block; margin: auto; align-items: center;" src="brinquedos.png" alt="brinquedos" width="150" height="150">
+							<p style="text-align: center; font-weight: bold; font-size: 20px;"></a>Loja virtual</p></div>
+						</body>
+					</foreignobject>
+				</svg>
+				<svg width="250" height="332" xmlns="http://www.w3.org/2000/svg">
+					<rect width="200" height="280" x="50" y="50" rx="20" ry="20" fill="#f9f9f9"/>
+					<foreignobject x="20" y="75" width="265" height="332">
+						<body xmlns="http://www.w3.org/1999/xhtml">
+							<div><a href="https://maps.google.com/"><img style="display: block; margin: auto; align-items: center;" src="petshop.png" alt="petshop" width="170" height="150">
+							<p style="text-align: center; font-weight: bold; font-size: 20px;"></a>Lojas por perto</p></div>
+						</body>
+					</foreignobject>
+				</svg>
+				<svg width="250" height="332" xmlns="http://www.w3.org/2000/svg">
+					<rect width="200" height="280" x="50" y="50" rx="20" ry="20" fill="#f9f9f9"/>
+					<foreignobject x="20" y="75" width="260" height="332">
+						<body xmlns="http://www.w3.org/1999/xhtml">
+							<div><a href="https://caesegatos.com.br/"><img style="display: block; margin: auto; align-items: center;" src="noticias.png" alt="noticias" width="170" height="150">
+							<p style="text-align: center; font-weight: bold; font-size: 20px;"></a>Notícias</p></div>
+						</body>
+					</foreignobject>
+				</svg>
+			<div>	
+            <svg style="cursor: pointer;" target="_blank" onclick="descubraMais()" class="descubraMais" width="400" height="100">
+					<rect width="400" height="100" style="fill:rgb(52,100,196); border-radius: 25px;" />
+			  		<foreignobject x="0" y="0" width="200" height="50">
+			            <body xmlns="http://www.w3.org/1999/xhtml">
+			                <div style="font-size: 20px; text-align: center;"><b>Descubra Mais...</b></div>
+			            </body>
+			        </foreignobject>
+			  Pão de queijo.
+			</svg>
+			<p style="position: fixed; right: 20px; bottom: 0; font-size: x-small; text-align: bottom;">₢ ETEC Dep. Ary de Camargo Pedroso</p>
+			<a href="ajuda.html" target="_blank" style="position: fixed; left: 20px; bottom: 0; font-size: medium; text-align: bottom; color: black;">Ajuda <img src="help.png" style="position: absolute; bottom: 0px"alt="help" width="20px" height="20px"></a>
+        </div>
+	</body>
+	<script>
+        let loading;
+
+		function Menu() {
+			const botao = document.querySelector(".botao");
+			if (botao) {
+			botao.style.transform = "rotate(90deg)";
+			document.getElementById('menuLateral').style.left = "0px";
+			}
+		}
+
+		function fecharMenu() {
+			const botao = document.querySelector('.botao');
+			if (botao) {
+				botao.style.transform = 'rotate(-180deg)';
+				document.getElementById('menuLateral').style.left = '-300px';
+			}
+
+		}
+
+		function Acheseupet() {
+			window.location.href = "www.acheseupet.com.br"; 
+		}
+
+		function delayTime() {
+		loading = setTimeout(showPage, 5000);
+		}
+
+		function descubraMais() {
+			window.location.href = "https://www.petbr.com.br/";
+		}
+
+		let buttonm = document.getElementById("buttonM");
+
+		buttonm.addEventListener('mousemove', (e) => {
+		    x = e.offsetX;
+		    y = e.offsetY;
+		    buttonm.style.setProperty('--mouse-x', x + "px");
+		    buttonm.style.setProperty('--mouse-y', y + "px");
+		});
+
+	</script>
+
+</html>
+
+
+
+
+
+
+
+
+
+
